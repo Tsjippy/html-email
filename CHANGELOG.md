@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- implemented wp_get_environment_type(
 
 ### Fixed
 

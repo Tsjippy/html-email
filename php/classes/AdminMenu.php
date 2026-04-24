@@ -61,7 +61,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
     public function data($parent){
         SIM\addRawHtml($this->emailStats(), $parent);
         
-        return false;
+        return true;
     }
 
     public function functions($parent){
@@ -95,6 +95,9 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                 }
             }
         }
+
+        $timeSpan       = isset($_POST['timespan']) ? sanitize_text_field($_POST['timespan']) : '';
+
         ?>
         <script>
             function showdatefields(target){
@@ -121,23 +124,23 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                 <div class="alignleft">
                     <select name="timespan" class="nonice" onchange="showdatefields(this)">
                         <option value="7">Last 7 days</option>
-                        <option value="14" <?php if($_POST['timespan'] == "14"){echo 'selected';}?>>Last 14 days</option>
-                        <option value="30" <?php if($_POST['timespan'] == "30"){echo 'selected';}?>>Last 30 days</option>
-                        <option value="after" <?php if($_POST['timespan'] == "after"){echo 'selected';}?>>After...</option>
-                        <option value="custom" <?php if($_POST['timespan'] == "custom"){echo 'selected';}?>>Custom Date Range</option>
+                        <option value="14" <?php if($timeSpan == "14"){echo 'selected';}?>>Last 14 days</option>
+                        <option value="30" <?php if($timeSpan == "30"){echo 'selected';}?>>Last 30 days</option>
+                        <option value="after" <?php if($timeSpan == "after"){echo 'selected';}?>>After...</option>
+                        <option value="custom" <?php if($timeSpan == "custom"){echo 'selected';}?>>Custom Date Range</option>
                     </select>
 
-                    <input type="date" name="date" class="" value="<?php echo $_POST['date'];?>" <?php if($_POST['timespan'] != "after"){echo 'style="display:none;"';}?>>
+                    <input type="date" name="date" class="" value="<?php echo $_POST['date'] ?? '';?>" <?php if($timeSpan != "after"){echo 'style="display:none;"';}?>>
 
-                    <span id="querydates" <?php if($_POST['timespan'] != "custom"){echo 'style="display:none;"';}?>>
-                        Between <input type="date" name="date-start" class="" value="<?php echo $_POST['date-start'];?>" >
-                        and <input type="date" name="date-end" class="" value="<?php echo $_POST['date-end'];?>">
+                    <span id="querydates" <?php if($timeSpan != "custom"){echo 'style="display:none;"';}?>>
+                        Between <input type="date" name="date-start" class="" value="<?php echo $_POST['date-start'] ?? '';?>" >
+                        and <input type="date" name="date-end" class="" value="<?php echo $_POST['date-end'] ?? '';?>">
 
                     </span>
 
                     <select name="type" class="nonice">
                         <option value="mail-opened">Openend</option>
-                        <option value="link-clicked" <?php if($_POST['type'] == "link-clicked"){echo 'selected';}?>>Clicked links</option>
+                        <option value="link-clicked" <?php if(isset($_POST['type']) && $_POST['type'] == "link-clicked"){echo 'selected';}?>>Clicked links</option>
                     </select>
 
                     <?php
@@ -162,7 +165,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                     <button type="submit" class="button">Filter</button>
                 </div>
                 <p class="search-box">
-                    <input type="search" name="s" value="<?php echo $_POST['s'];?>">                
+                    <input type="search" name="s" value="<?php echo $_POST['s'] ?? '';?>">                
                     <input type="submit" id="search-submit" class="button" value="Search Emails" title="Search in subject and recipients">
                 </p>
             </form>

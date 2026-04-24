@@ -62,7 +62,7 @@ class HtmlEmail{
      */
     private function storeEmail(){
         global $wpdb;
-        if(SIM\getModuleOption(MODULE_SLUG, 'no-statistics')){
+        if(SETTINGS['no-statistics']){
             // Add e-mail to e-mails db
             $wpdb->insert(
                 $this->mailTable ,
@@ -127,7 +127,7 @@ class HtmlEmail{
 
         // max attachment size
         $totalSize  = 0;
-        $maxSize    = SIM\getModuleOption(MODULE_SLUG, 'maxsize');
+        $maxSize    = SETTINGS['maxsize'] ?? 20;
         $remaining  = [];
         if(!$maxSize){
             $maxSize    = 20;
@@ -170,7 +170,7 @@ class HtmlEmail{
         }
 
         // Add site greetings if not given
-        $defaultGreeting    = SIM\getModuleOption(MODULE_SLUG, 'closing');
+        $defaultGreeting    = SETTINGS['closing'] ?? '';
         if(!$defaultGreeting){
             $defaultGreeting    = 'Kind regards,';
         }
@@ -244,7 +244,7 @@ class HtmlEmail{
      * @return  string              Replace html
      */
     public function urlReplace($matches){
-        if(empty($matches) || !SIM\getModuleOption(MODULE_SLUG, 'no-statistics')){
+        if(empty($matches) || !SETTINGS['no-statistics'] ?? false){
             return false;
         }
 
@@ -273,7 +273,7 @@ class HtmlEmail{
      */
     public function htmlEmail(){
         // Get the logo url and make public if private
-        $headerImageId    = SIM\getModuleOption(MODULE_SLUG, 'picture-ids')['header_image'];
+        $headerImageId    = SETTINGS['picture-ids']['header_image'] ?? false;
         if(!$headerImageId){
             $headerImageId= get_theme_mod( 'custom_logo' );
         }
@@ -283,7 +283,7 @@ class HtmlEmail{
         $pattern = "/<img\s*src=[\"|']([^\"']*)[\"|']/i";
         $message = preg_replace_callback($pattern, array($this, 'checkEmailImages'), $this->message);
 
-        if(SIM\getModuleOption(MODULE_SLUG, 'no-statistics')){
+        if(SETTINGS['no-statistics'] ?? false){
             //Enable e-mail tracking
             $pattern = "/href=[\"|']([^\"']*)[\"|']/i";
             $message = preg_replace_callback($pattern, array($this, 'urlReplace'), $message);
@@ -332,7 +332,7 @@ class HtmlEmail{
                                         <?php
                                         echo apply_filters('sim_email_footer', $this->footer, $this->message);
                                         
-                                        if(SIM\getModuleOption(MODULE_SLUG, 'no-statistics')){
+                                        if(SETTINGS['no-statistics'] ?? false){
                                             $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";
                                             
                                             echo "<img src='$url' alt='.' width='1px' height='1px'>";
@@ -357,55 +357,62 @@ class HtmlEmail{
      * @return  object      all query results
      */
     public function getEmailStatistics(){
-        global $wpdb;
-        if($_POST['type'] == 'link-clicked'){
-            $query      =  "SELECT ";
-            $where      = "$this->mailEventTable.type = '{$_POST['type']}'";
+        $query      =  "SELECT ";
+        $vars       = [];
+
+        if(isset($_POST['type']) && $_POST['type'] == 'link-clicked'){
+            $type       = 'link-clicked';
         }else{
-            $where      = "$this->mailEventTable.type = 'mail-opened'";
-            $query      =  "SELECT COUNT($this->mailEventTable.email_id) AS viewcount, ";
+            $type       = 'mail-opened';
+            $query     .= "COUNT(events.email_id) AS viewcount, ";
         }
-        $query  .= "$this->mailEventTable.url, $this->mailEventTable.type, $this->mailTable.recipients, $this->mailTable.time_send, $this->mailTable.subject FROM `$this->mailTable` LEFT JOIN $this->mailEventTable ON $this->mailEventTable.`email_id`=$this->mailTable.id";
+
+        $query      .= "events.url, events.type, emails.recipients, emails.time_send, emails.subject FROM %i as emails";
+        $vars[]     = $this->mailTable;
+
+        $query      .= " LEFT JOIN %i as events ON events.email_id=emails.id";
+        $vars[]     = $this->mailEventTable;
+
+        $query      .= " WHERE events.type = '$type' ";
 
         if(empty($_POST)){
-            $query  .= " WHERE $where AND $this->mailTable.time_send >= ".strtotime("-7 days");
-        }else{
-            if(!empty($_POST['s']) || isset($_POST['recipient'])){
-                if(isset($_POST['recipient'])){
-                    $search  = '%'.$_POST['recipient'].'%';
-                }else{
-                    $search  = '%'.$_POST['s'].'%';
-                }
-                
-                $query  .= " WHERE $where AND $this->mailTable.recipients LIKE '$search' OR $this->mailTable.subject LIKE '$search'";
+            $query  .= "AND emails.time_send >= ".strtotime("-7 days");
+        }elseif(!empty($_POST['s']) || isset($_POST['recipient'])){
+            if(isset($_POST['recipient'])){
+                $search  = sanitize_text_field(wp_unslash($_POST['recipient']));
             }else{
-                if(!empty($_POST['date'])){
-                    $maxTime   = strtotime($_POST['date']);
-                }elseif(!empty($_POST['date-start'])){
-                    $maxTime   = strtotime($_POST['date-start']);
+                $search  = sanitize_text_field(wp_unslash($_POST['s']));
+            }
+            
+            $query  .= "AND emails.recipients LIKE '%$search%' OR emails.subject LIKE '%$search%'";
+        }else{
+            if(!empty($_POST['date'])){
+                $maxTime   = strtotime($_POST['date']);
+            }elseif(!empty($_POST['date-start'])){
+                $maxTime   = strtotime($_POST['date-start']);
+            }else{
+                if(empty($_POST['timespan'])){
+                    $timespan   = '7';
                 }else{
-                    if(empty($_POST['timespan'])){
-                        $timespan   = '7';
-                    }else{
-                        $timespan   = $_POST['timespan'];
-                    }
-                    $maxTime   = strtotime("-$timespan days");
+                    $timespan   = (int) $_POST['timespan'];
                 }
-                $query  .= " WHERE $where AND $this->mailTable.time_send >= $maxTime";
 
-                if(!empty($_POST['date-end'])){
-                    $maxTime    = strtotime($_POST['date-end']);
-                    $query  .= " AND $this->mailTable.time_send <= $maxTime";
-                }
+                $maxTime   = strtotime("-$timespan days");
+            }
+            $query  .= "AND emails.time_send >= $maxTime";
+
+            if(!empty($_POST['date-end'])){
+                $maxTime    = strtotime($_POST['date-end']);
+                $query  .= " AND emails.time_send <= $maxTime";
             }
         }
 
-        if($_POST['type'] != 'link-clicked'){
-            $query  .= " GROUP BY $this->mailTable.id";
+        if($type != 'link-clicked'){
+            $query  .= " GROUP BY emails.id";
         }
-        $query  .= " ORDER BY $this->mailTable.time_send DESC";
+        $query  .= " ORDER BY emails.time_send DESC";
 
-        return $wpdb->get_results($query);
+        return SIM\getFromDb('email-stats', $query, $vars);
     }
 
     /**
@@ -415,6 +422,6 @@ class HtmlEmail{
         global $wpdb;
 
         $wpdb->query("TRUNCATE $this->mailTable");
-        $wpdb->query("TRUNCATE $this->mailEventTable");
+        $wpdb->query("TRUNCATE events");
     }
 }

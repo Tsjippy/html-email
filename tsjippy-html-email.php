@@ -30,3 +30,14 @@ define(__NAMESPACE__ .'\PLUGIN', plugin_basename(__FILE__));
 define(__NAMESPACE__ .'\PLUGINPATH', __FILE__);
 define(__NAMESPACE__ .'\PLUGINVERSION', $pluginData['Version']);
 define(__NAMESPACE__ .'\SETTINGS', get_option('sim_htmlemail_settings', []));
+
+// run on activation
+add_action( 'activated_plugin', function ( $plugin ) {
+    if( $plugin != PLUGIN ) {
+        return;
+    }
+
+    // Create the dbs
+	$email     = new HtmlEmail();
+	$email->createDbTables();
+} );

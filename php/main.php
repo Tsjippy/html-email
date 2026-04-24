@@ -1,12 +1,12 @@
 <?php
-namespace SIM\FANCYEMAIL;
+namespace SIM\HTMLEMAIL;
 use SIM;
 
 // Filter any wp_email
 add_filter('wp_mail', __NAMESPACE__.'\mailFilter', 10, 1);
 function mailFilter($args){
-    $fancyEmail     = new FancyEmail();
-    $args           = $fancyEmail->filterMail($args);
+    $html     = new HtmlEmail();
+    $args     = $html->filterMail($args);
 
     return $args;
 }
@@ -17,18 +17,17 @@ function beforeMail($shouldSkip, $atts ){
     if(
         empty($atts['to'])        ||
         (
-            SIM\getModuleOption(MODULE_SLUG, 'no-localhost') &&
+            SETTINGS['no-localhost'] &&
             wp_get_environment_type() === 'local'
         )                                                   ||
         (
-            SIM\getModuleOption(MODULE_SLUG, 'no-staging') &&
+            SETTINGS['no-staging'] &&
             get_option("wpstg_is_staging_site") == "true"
         )
     ){
         return true;
     }
 
-    //SIM\printArray($atts);
     return $shouldSkip;
 }
 
@@ -45,4 +44,11 @@ function mailCatcher($errorMessage, $instance, $mailMailer){
     SIM\printArray($errorMessage);
     SIM\printArray($instance);
     SIM\printArray($mailMailer);
+}
+
+add_shortcode('email_stats', __NAMESPACE__.'\emailStats');
+function emailStats(){
+    $adminMenu  = new AdminMenu(SETTINGS, 'e-mail');
+    
+    return $adminMenu->emailStats();
 }

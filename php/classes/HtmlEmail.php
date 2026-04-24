@@ -1,8 +1,8 @@
 <?php
-namespace SIM\FANCYEMAIL;
+namespace SIM\HTMLEMAIL;
 use SIM;
 
-class FancyEmail{
+class HtmlEmail{
     public $mailTable;
     public $mailEventTable;
     public $mailTrackerUrl;

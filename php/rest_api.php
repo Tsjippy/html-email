@@ -1,8 +1,6 @@
 <?php
-namespace SIM\FANCYEMAIL;
+namespace SIM\HTMLEMAIL;
 use SIM;
-
-global $wpdb;
 
 add_action( 'rest_api_init',  __NAMESPACE__.'\restApiInit');
 function restApiInit() {
@@ -30,7 +28,7 @@ function restApiInit() {
 }
 
 function mailTracking($wpRestRequest){
-	SIM\printArray($wpRestRequest->get_params());
+	//SIM\printArray($wpRestRequest->get_params());
 	return $wpRestRequest->get_params();
 }
 
@@ -60,11 +58,11 @@ function mailTracker(\WP_REST_Request $request) {
 			$type	= 'link-clicked';
 		}
 
-		$fancyEmail     = new FancyEmail();
+		$html     = new HtmlEmail();
 
 		// Add e-mail to e-mails db
 		$wpdb->insert(
-			$fancyEmail->mailEventTable,
+			$html->mailEventTable,
 			array(
 				'email_id'		=> $mailId,
 				'type'			=> $type,

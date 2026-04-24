@@ -18,9 +18,7 @@ function beforeMail($shouldSkip, $atts ){
         empty($atts['to'])        ||
         (
             SIM\getModuleOption(MODULE_SLUG, 'no-localhost') &&
-            (
-                $_SERVER['HTTP_HOST'] == 'localhost'
-            )
+            wp_get_environment_type() === 'local'
         )                                                   ||
         (
             SIM\getModuleOption(MODULE_SLUG, 'no-staging') &&

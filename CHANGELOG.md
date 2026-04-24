@@ -8,6 +8,7 @@
 - module to plugin
 
 ### Fixed
+- admin menu
 
 ### Updated
 

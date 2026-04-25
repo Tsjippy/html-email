@@ -7,6 +7,7 @@
 ### Changed
 - implemented wp_get_environment_type(
 - module to plugin
+- sim prefix to tsjippy prefix
 
 ### Fixed
 - admin menu

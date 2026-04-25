@@ -11,7 +11,7 @@ use SIM;
  * Requires at least:	6.3
  * Requires PHP: 		8.3
  * Tested up to: 		6.9
- * Plugin URI:			https://github.com/Tsjippy/comments/
+ * Plugin URI:			https://github.com/Tsjippy/htmlemail/
  * Tested:				6.9
  * TextDomain:			tsjippy
  * License: GPLv2 or later
@@ -29,7 +29,7 @@ $pluginData = get_plugin_data(__FILE__, false, false);
 define(__NAMESPACE__ .'\PLUGIN', plugin_basename(__FILE__));
 define(__NAMESPACE__ .'\PLUGINPATH', __DIR__.'/');
 define(__NAMESPACE__ .'\PLUGINVERSION', $pluginData['Version']);
-define(__NAMESPACE__ .'\SETTINGS', get_option('sim_htmlemail_settings', []));
+define(__NAMESPACE__ .'\SETTINGS', get_option('tsjippy_htmlemail_settings', []));
 
 // run on activation
 add_action( 'activated_plugin', function ( $plugin ) {

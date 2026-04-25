@@ -70,7 +70,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
 
     public function emailStats(){
         //Load js
-        wp_enqueue_script('sim_table_script');
+        wp_enqueue_script('tsjippy_table_script');
 
         $email     = new HtmlEmail();
 
@@ -176,7 +176,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                 <?php
             }else{
             ?>
-            <table class='sim-table'>
+            <table class='tsjippy-table'>
                 <thead>
                     <tr>
                         <th>Date send</th>

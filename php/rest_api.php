@@ -33,7 +33,7 @@ function mailTracking($wpRestRequest){
 }
 
 // Make mailtracker rest api url publicy available
-add_filter('sim_allowed_rest_api_urls', __NAMESPACE__.'\allowedRestApiUrls');
+add_filter('tsjippy_allowed_rest_api_urls', __NAMESPACE__.'\allowedRestApiUrls');
 function allowedRestApiUrls($urls){
 	$urls[]	= RESTAPIPREFIX.'/mailtracker';
 	$urls[]	= RESTAPIPREFIX.'/mailfailed';

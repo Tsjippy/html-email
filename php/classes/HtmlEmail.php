@@ -16,13 +16,13 @@ class HtmlEmail{
     public function __construct(){
         global $wpdb;
 
-        $this->mailTable        = $wpdb->prefix."sim_emails";
-        $this->mailEventTable   = $wpdb->prefix."sim_email_events";
+        $this->mailTable        = $wpdb->prefix."tsjippy_emails";
+        $this->mailEventTable   = $wpdb->prefix."tsjippy_email_events";
         $this->mailTrackerUrl   = SITEURL."/wp-json/".RESTAPIPREFIX."/mailtracker";
     }
 
     /**
-     * Creates the tables for this module
+     * Creates the tables for this plugin
      */
     public function createDbTables(){
         if ( !function_exists( 'maybe_create_table' ) ) {
@@ -184,7 +184,7 @@ class HtmlEmail{
         }
 
         // Mention that this is an automated message
-        $footerUrl     = apply_filters('sim_email_footer_url', [
+        $footerUrl     = apply_filters('tsjippy_email_footer_url', [
             'url'   => SITEURL,
             'text'  => SITEURL
         ]);
@@ -330,7 +330,7 @@ class HtmlEmail{
                                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                                     <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
                                         <?php
-                                        echo apply_filters('sim_email_footer', $this->footer, $this->message);
+                                        echo apply_filters('tsjippy_email_footer', $this->footer, $this->message);
                                         
                                         if(SETTINGS['no-statistics'] ?? false){
                                             $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";

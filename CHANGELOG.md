@@ -2,6 +2,7 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+- trailing slash to pluginpath connstant
 
 ### Changed
 - implemented wp_get_environment_type(

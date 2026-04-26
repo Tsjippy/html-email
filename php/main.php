@@ -1,6 +1,10 @@
 <?php
-namespace SIM\HTMLEMAIL;
-use SIM;
+namespace TSJIPPY\HTMLEMAIL;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Filter any wp_email
 add_filter('wp_mail', __NAMESPACE__.'\mailFilter', 10, 1);
@@ -35,15 +39,15 @@ function beforeMail($shouldSkip, $atts ){
 add_action( 'wp_mail_failed', __NAMESPACE__.'\onMailFailed');
 function onMailFailed( $wpError ) {
     if(!isset($wpError->errors['wp_mail_failed'][0]) || $wpError->errors['wp_mail_failed'][0] != 'You must provide at least one recipient email address.'){
-        SIM\printArray($wpError);
+        TSJIPPY\printArray($wpError);
     }
 }
 
 add_action( 'wp_mail_smtp_mailcatcher_send_failed', __NAMESPACE__.'\mailCatcher', 10, 3 );
 function mailCatcher($errorMessage, $instance, $mailMailer){
-    SIM\printArray($errorMessage);
-    SIM\printArray($instance);
-    SIM\printArray($mailMailer);
+    TSJIPPY\printArray($errorMessage);
+    TSJIPPY\printArray($instance);
+    TSJIPPY\printArray($mailMailer);
 }
 
 add_shortcode('email_stats', __NAMESPACE__.'\emailStats');

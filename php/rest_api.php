@@ -1,6 +1,10 @@
 <?php
-namespace SIM\HTMLEMAIL;
-use SIM;
+namespace TSJIPPY\HTMLEMAIL;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 add_action( 'rest_api_init',  __NAMESPACE__.'\restApiInit');
 function restApiInit() {
@@ -28,7 +32,7 @@ function restApiInit() {
 }
 
 function mailTracking($wpRestRequest){
-	//SIM\printArray($wpRestRequest->get_params());
+	//TSJIPPY\printArray($wpRestRequest->get_params());
 	return $wpRestRequest->get_params();
 }
 
@@ -72,13 +76,13 @@ function mailTracker(\WP_REST_Request $request) {
 		);
 
 		if($wpdb->last_error !== ''){
-			SIM\printArray($wpdb->last_error);
+			TSJIPPY\printArray($wpdb->last_error);
 		}
 	}
 
 	if(empty($url)){
 		// redirect to picture
-		$url = SIM\pathToUrl(PLUGINPATH.'pictures/transparent.png').'?ver='.time();
+		$url = TSJIPPY\pathToUrl(PLUGINPATH.'pictures/transparent.png').'?ver='.time();
 	}
 
 	wp_redirect( $url );

@@ -1,6 +1,10 @@
 <?php
-namespace SIM\HTMLEMAIL;
-use SIM;
+namespace TSJIPPY\HTMLEMAIL;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class HtmlEmail{
     public $mailTable;
@@ -120,7 +124,7 @@ class HtmlEmail{
         $this->message      = &$args['message'];
 
         if(is_array($this->message)){
-            SIM\printArray($this->message);
+            TSJIPPY\printArray($this->message);
         }else{
             $this->message = trim($this->message ?? '');
         }
@@ -412,7 +416,7 @@ class HtmlEmail{
         }
         $query  .= " ORDER BY emails.time_send DESC";
 
-        return SIM\getFromDb('email-stats', $query, $vars);
+        return TSJIPPY\getFromDb('email-stats', $query, $vars);
     }
 
     /**

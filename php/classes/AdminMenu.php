@@ -1,7 +1,7 @@
 <?php
-namespace SIM\HTMLEMAIL;
-use SIM;
-use SIM\ADMIN;
+namespace TSJIPPY\HTMLEMAIL;
+use TSJIPPY;
+use TSJIPPY\ADMIN;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
         <label>Select a picture for the e-mail header.</label>
         <?php
 
-        SIM\addRawHtml(ob_get_clean(), $parent);
+        TSJIPPY\addRawHtml(ob_get_clean(), $parent);
 
         $this->pictureSelector('header_image', 'e-mail header', $parent);
 
@@ -59,7 +59,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
     }
 
     public function data($parent){
-        SIM\addRawHtml($this->emailStats(), $parent);
+        TSJIPPY\addRawHtml($this->emailStats(), $parent);
         
         return true;
     }

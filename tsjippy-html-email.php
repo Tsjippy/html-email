@@ -43,3 +43,10 @@ add_action( 'activated_plugin', function ( $plugin ) {
 	$email     = new HtmlEmail();
 	$email->createDbTables();
 } );
+
+add_action( 'activated_plugin', function($plugin){
+	// Redirect to settings page after plugin activation
+    if($plugin == PLUGIN && wp_safe_redirect( esc_url(admin_url('admin.php?page=tsjippy-'.PLUGINSLUG) )  ) ){
+		exit();
+	}
+});

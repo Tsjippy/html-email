@@ -3,6 +3,7 @@
 
 ### Added
 - trailing slash to pluginpath connstant
+- redirection to settings page on plugin activation
 
 ### Changed
 - implemented wp_get_environment_type(

@@ -12,6 +12,7 @@
 - base namespace to TSJIPPY
 - PLUGINCONSTANT value
 - exclude .vscode from releases
+- updated github workflow versions
 
 ### Fixed
 - admin menu

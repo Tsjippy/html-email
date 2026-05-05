@@ -18,29 +18,25 @@ class AdminMenu extends ADMIN\SubAdminMenu{
 	
         ?>
         <label>
-            <input type='checkbox' name='no-statistics' value='1' <?php if(isset($settings['no-statistics'])){echo 'checked';}?>>
+            <input type='checkbox' name='no-statistics' value='1' <?php if(isset($this->settings['no-statistics'])){echo 'checked';}?>>
             Do not keep statistics about e-mails
-        </label>
-        <br><br>
-        <label>
-            Default e-mail greeting<br>
-            <input type='text' name='closing' value='<?php if(isset($settings['closing'])){echo $settings['closing'];}else{echo 'Kind regards'; }?>'>
-        </label>
-        <br><br>
-        <label>
-            <input type='checkbox' name='no-staging' value='1' <?php if(isset($settings['no-staging'])){echo 'checked';}?>>
-            Do not send e-mails from staging websites
         </label>
         <br>
         <label>
-            <input type='checkbox' name='no-localhost' value='1' <?php if(isset($settings['no-localhost'])){echo 'checked';}?>>
+            <input type='checkbox' name='no-localhost' value='1' <?php if(isset($this->settings['no-localhost'])){echo 'checked';}?>>
             Do not send e-mails from localhost
         </label>
         <br>
         <br>
         <label>
+            Default e-mail greeting<br>
+            <input type='text' name='closing' value='<?php if(isset($this->settings['closing'])){echo $this->settings['closing'];}else{echo 'Kind regards'; }?>'>
+        </label>
+        <br>
+        <br>
+        <label>
             Max attachment size in MB (multiple e-mails will be send to stay below the maximum if needed)<br>
-            <input type='number' name='maxsize' value='<?php if(isset($settings['maxsize'])){echo $settings['maxsize'];}?>'>
+            <input type='number' name='maxsize' value='<?php if(isset($this->settings['maxsize'])){echo $this->settings['maxsize'];}?>'>
         </label>
         <br>
         <br>

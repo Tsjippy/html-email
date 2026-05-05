@@ -23,10 +23,6 @@ function beforeMail($shouldSkip, $atts ){
         (
             SETTINGS['no-localhost'] &&
             wp_get_environment_type() === 'local'
-        )                                                   ||
-        (
-            SETTINGS['no-staging'] &&
-            get_option("wpstg_is_staging_site") == "true"
         )
     ){
         return true;

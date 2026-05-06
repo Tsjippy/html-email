@@ -172,7 +172,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                 <?php
             }else{
             ?>
-            <table class='tsjippy-table'>
+            <table class='tsjippy table'>
                 <thead>
                     <tr>
                         <th>Date send</th>

@@ -15,7 +15,7 @@ function restApiInit() {
 		array(
 			'methods' 				=> 'GET',
 			'callback' 				=> __NAMESPACE__.'\mailTracker',
-			'permission_callback' 	=> '__return_true',
+			'permission_callback' 	=> '__return_true',					// Allow public access
 		)
 	);
 
@@ -26,11 +26,18 @@ function restApiInit() {
 		array(
 			'methods' 				=> \WP_REST_Server::ALLMETHODS,
 			'callback' 				=> __NAMESPACE__.'\mailTracking',
-			'permission_callback' 	=> '__return_true',
+			'permission_callback' 	=> '__return_true',					// Allow public access, this is just for testing purposes, we can change this later if we want to restrict access to this endpoint
 		)
 	);
 }
 
+/**
+ * Tracks e-mail opens and link clicks
+ * 
+ * @param \WP_REST_Request $wpRestRequest	The REST request object containing the parameters for the request
+ * 
+ * @return array	The parameters of the request, this is just for testing purposes, we can change this later to return something more useful if needed
+ */
 function mailTracking($wpRestRequest){
 	//TSJIPPY\printArray($wpRestRequest->get_params());
 	return $wpRestRequest->get_params();
@@ -38,6 +45,14 @@ function mailTracking($wpRestRequest){
 
 // Make mailtracker rest api url publicy available
 add_filter('tsjippy_allowed_rest_api_urls', __NAMESPACE__.'\allowedRestApiUrls');
+
+/**
+ * Adds the mail tracker URLs to the list of allowed REST API URLs
+ * 
+ * @param array $urls	The list of allowed REST API URLs
+ * 
+ * @return array	The updated list of allowed REST API URLs
+ */
 function allowedRestApiUrls($urls){
 	$urls[]	= RESTAPIPREFIX.'/mailtracker';
 	$urls[]	= RESTAPIPREFIX.'/mailfailed';

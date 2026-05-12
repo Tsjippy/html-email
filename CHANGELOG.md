@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- permission callback for rest api
 
 ### Fixed
 
 ### Updated
+
+## [10.0.5] - 2026-05-12
+
+
+### Changed
+- permission callback for rest api
 
 ## [10.0.4] - 2026-05-06
 

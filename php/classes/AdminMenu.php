@@ -202,7 +202,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                     ?>
                     <tr>
                         <td>
-                            <?php echo date(DATEFORMAT.' '.TIMEFORMAT, $result->time_send);?>
+                            <?php echo gmdate(DATEFORMAT.' '.TIMEFORMAT, $result->time_send);?>
                         </td>
                         <td>
                             <?php echo $result->recipients;?>

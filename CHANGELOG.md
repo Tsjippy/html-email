@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- date( to gmdate(
 
 ### Fixed
 
 ### Updated
+
+## [10.0.6] - 2026-05-14
+
+
+### Changed
+- date( to gmdate(
 
 ## [10.0.5] - 2026-05-12
 

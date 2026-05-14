@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- redirect to non-existing page
 
 ### Fixed
 

@@ -96,8 +96,8 @@ function mailTracker(\WP_REST_Request $request) {
 	}
 
 	if(empty($url)){
-		// redirect to picture
-		$url = TSJIPPY\pathToUrl(PLUGINPATH.'pictures/transparent.png').'?ver='.time();
+		// redirect to non-existing page
+		$url = SITEURL.'/tsjippy-email-tracking';
 	}
 
 	wp_redirect( $url );

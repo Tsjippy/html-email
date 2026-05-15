@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- redirect to non-existing page
 
 ### Fixed
 
 ### Updated
+
+## [10.0.8] - 2026-05-15
+
+
+### Changed
+- redirect to non-existing page
 
 ## [10.0.6] - 2026-05-14
 

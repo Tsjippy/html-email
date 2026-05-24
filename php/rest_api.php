@@ -67,7 +67,11 @@ function mailTracker(\WP_REST_Request $request) {
 	global $wpdb;
 
 	$mailId		= $request->get_param('mailid');
-	$url		= strval(urldecode($request->get_param('url')));
+	$url		= $request->get_param('url');
+
+	if(!empty($url)){
+		$url		= strval(urldecode($request->get_param('url')));
+	}
 
 	// Store mail open or link clicked in db
 	if(is_numeric($mailId)){

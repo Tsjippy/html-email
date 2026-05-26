@@ -90,7 +90,7 @@ function mailTracker(\WP_REST_Request $request) {
 				'email_id'		=> $mailId,
 				'type'			=> $type,
 				'time'			=> current_time('U'),
-				'url'			=> str_replace(TSJIPPY\SITEURL, '', $url)
+				'url'			=> str_replace(SITEURL, '', $url)
 			)
 		);
 

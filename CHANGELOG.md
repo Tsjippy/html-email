@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- site url bug
 
 ### Updated
+
+## [10.1.0] - 2026-05-26
+
+
+### Fixed
+- site url bug
 
 ## [10.0.9] - 2026-05-24
 

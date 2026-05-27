@@ -77,6 +77,7 @@ function mailTracker(\WP_REST_Request $request) {
 	if(is_numeric($mailId)){
 		if(empty($url)){
 			$type	= 'mail-opened';
+			$url	= '';
 		}else{
 			$type	= 'link-clicked';
 		}

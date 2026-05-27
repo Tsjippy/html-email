@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- empty url bug
 
 ### Updated
+
+## [10.1.2] - 2026-05-27
+
+
+### Fixed
+- empty url bug
 
 ## [10.1.1] - 2026-05-26
 

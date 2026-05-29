@@ -98,7 +98,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
             }
         }
 
-        $timeSpan       = isset($_POST['timespan']) ? sanitize_text_field($_POST['timespan']) : '';
+        $timeSpan       = sanitize_text_field( wp_unslash( $_POST['timespan'] ?? ''));
 
         ?>
         <script>

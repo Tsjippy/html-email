@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- merged hooks.md into readme.md
 
 ### Fixed
 
 ### Updated
+
+## [10.1.5] - 2026-06-01
+
+
+### Changed
+- merged hooks.md into readme.md
 
 ## [10.1.4] - 2026-05-30
 

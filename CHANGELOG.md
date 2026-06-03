@@ -2,13 +2,18 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
-- ech escaping
 
 ### Changed
 
 ### Fixed
 
 ### Updated
+
+## [10.1.6] - 2026-06-03
+
+
+### Added
+- ech escaping
 
 ## [10.1.5] - 2026-06-01
 

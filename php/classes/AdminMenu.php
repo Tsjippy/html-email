@@ -208,7 +208,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                             <?php echo $result->recipients;?>
                         </td>
                         <td>
-                            <?php echo $result->subject;?>
+                            <?php echo esc_attr($result->subject);?>
                         </td>
                         <?php
                         if($_POST['type'] == 'link-clicked'){
@@ -220,7 +220,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                         }else{
                             ?>
                             <td>
-                                <?php echo $result->viewcount;?>
+                                <?php echo esc_attr($result->viewcount);?>
                             </td>
                             <?php
                         }

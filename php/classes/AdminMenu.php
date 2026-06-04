@@ -3,46 +3,46 @@ namespace TSJIPPY\HTMLEMAIL;
 use TSJIPPY;
 use TSJIPPY\ADMIN;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( ! defined('ABSPATH')) {
+    exit;
 }
 
 class AdminMenu extends ADMIN\SubAdminMenu{
 
     /**
      * AdminMenu constructor.
-     * 
+     *
      * @param array $settings The settings for the plugin
      * @param string $name The name of the plugin
      */
-    public function __construct($settings, $name){
+    public function __construct($settings, $name) {
         parent::__construct($settings, $name);
     }
 
-    public function settings($parent){
+    public function settings($parent) {
         ob_start();
-	
+
         ?>
         <label>
-            <input type='checkbox' name='no-statistics' value='1' <?php if(isset($this->settings['no-statistics'])){echo 'checked';}?>>
+            <input type='checkbox' name='no-statistics' value='1' <?php if (isset($this->settings['no-statistics'])) {echo 'checked';}?>>
             Do not keep statistics about e-mails
         </label>
         <br>
         <label>
-            <input type='checkbox' name='no-localhost' value='1' <?php if(isset($this->settings['no-localhost'])){echo 'checked';}?>>
+            <input type='checkbox' name='no-localhost' value='1' <?php if (isset($this->settings['no-localhost'])) {echo 'checked';}?>>
             Do not send e-mails from localhost
         </label>
         <br>
         <br>
         <label>
             Default e-mail greeting<br>
-            <input type='text' name='closing' value='<?php if(isset($this->settings['closing'])){echo $this->settings['closing'];}else{echo 'Kind regards'; }?>'>
+            <input type='text' name='closing' value='<?php if (isset($this->settings['closing'])) {echo $this->settings['closing'];}else{echo 'Kind regards'; }?>'>
         </label>
         <br>
         <br>
         <label>
             Max attachment size in MB (multiple e-mails will be send to stay below the maximum if needed)<br>
-            <input type='number' name='maxsize' value='<?php if(isset($this->settings['maxsize'])){echo $this->settings['maxsize'];}?>'>
+            <input type='number' name='maxsize' value='<?php if (isset($this->settings['maxsize'])) {echo $this->settings['maxsize'];}?>'>
         </label>
         <br>
         <br>
@@ -56,28 +56,28 @@ class AdminMenu extends ADMIN\SubAdminMenu{
         return true;
     }
 
-    public function emails($parent){
+    public function emails($parent) {
         return false;
     }
 
-    public function data($parent){
+    public function data($parent) {
         TSJIPPY\addRawHtml($this->emailStats(), $parent);
-        
+
         return true;
     }
 
-    public function functions($parent){
+    public function functions($parent) {
         return false;
     }
 
-    public function emailStats(){
+    public function emailStats() {
         //Load js
         wp_enqueue_script('tsjippy_table_script');
 
         $email     = new HtmlEmail();
 
         ob_start();
-        if(!empty($_POST['clear-email-stat-table'])){
+        if (!empty($_POST['clear-email-stat-table'])) {
             $email->clearTables();
             ?>
             <div class='success'>
@@ -90,28 +90,28 @@ class AdminMenu extends ADMIN\SubAdminMenu{
         $recipients     = [];
 
         // create an array of unique recipient e-mail addresses
-        foreach($results as $result){
-            foreach(explode(',', $result->recipients) as $r){
-                if(!in_array($r, $recipients)){
+        foreach ($results as $result) {
+            foreach (explode(',', $result->recipients) as $r) {
+                if (!in_array($r, $recipients)) {
                     $recipients[]   = $r;
                 }
             }
         }
 
-        $timeSpan       = sanitize_text_field( wp_unslash( $_POST['timespan'] ?? ''));
+        $timeSpan       = sanitize_text_field(wp_unslash($_POST['timespan'] ?? ''));
 
         ?>
         <script>
-            function showdatefields(target){
+            function showdatefields(target) {
                 document.getElementById('querydates').style.display = 'none';
-                document.getElementById('querydates').querySelectorAll('input').forEach(el=>el.value='');
+                document.getElementById('querydates').querySelectorAll('input').foreach (el=>el.value='');
 
                 target.closest('div').querySelector('[name="date"]').style.display = 'none';
                 target.closest('div').querySelector('[name="date"]').value      = '';
 
-                if(target.value == 'after'){
+                if (target.value == 'after') {
                     target.closest('div').querySelector('[name="date"]').style.display = '';
-                }else if(target.value == 'custom'){
+                }else if (target.value == 'custom') {
                     document.getElementById('querydates').style.display = '';
                 }
             }
@@ -126,15 +126,15 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                 <div class="alignleft">
                     <select name="timespan" class="nonice" onchange="showdatefields(this)">
                         <option value="7">Last 7 days</option>
-                        <option value="14" <?php if($timeSpan == "14"){echo 'selected';}?>>Last 14 days</option>
-                        <option value="30" <?php if($timeSpan == "30"){echo 'selected';}?>>Last 30 days</option>
-                        <option value="after" <?php if($timeSpan == "after"){echo 'selected';}?>>After...</option>
-                        <option value="custom" <?php if($timeSpan == "custom"){echo 'selected';}?>>Custom Date Range</option>
+                        <option value="14" <?php if ($timeSpan == "14") {echo 'selected';}?>>Last 14 days</option>
+                        <option value="30" <?php if ($timeSpan == "30") {echo 'selected';}?>>Last 30 days</option>
+                        <option value="after" <?php if ($timeSpan == "after") {echo 'selected';}?>>After...</option>
+                        <option value="custom" <?php if ($timeSpan == "custom") {echo 'selected';}?>>Custom Date Range</option>
                     </select>
 
-                    <input type="date" name="date" class="" value="<?php echo $_POST['date'] ?? '';?>" <?php if($timeSpan != "after"){echo 'style="display:none;"';}?>>
+                    <input type="date" name="date" class="" value="<?php echo $_POST['date'] ?? '';?>" <?php if ($timeSpan != "after") {echo 'style="display:none;"';}?>>
 
-                    <span id="querydates" <?php if($timeSpan != "custom"){echo 'style="display:none;"';}?>>
+                    <span id="querydates" <?php if ($timeSpan != "custom") {echo 'style="display:none;"';}?>>
                         Between <input type="date" name="date-start" class="" value="<?php echo $_POST['date-start'] ?? '';?>" >
                         and <input type="date" name="date-end" class="" value="<?php echo $_POST['date-end'] ?? '';?>">
 
@@ -142,18 +142,18 @@ class AdminMenu extends ADMIN\SubAdminMenu{
 
                     <select name="type" class="nonice">
                         <option value="mail-opened">Openend</option>
-                        <option value="link-clicked" <?php if(isset($_POST['type']) && $_POST['type'] == "link-clicked"){echo 'selected';}?>>Clicked links</option>
+                        <option value="link-clicked" <?php if (isset($_POST['type']) && $_POST['type'] == "link-clicked") {echo 'selected';}?>>Clicked links</option>
                     </select>
 
                     <?php
-                    if(!empty($recipients)){
+                    if (!empty($recipients)) {
                         ?>
                         <select name="recipient" class='inline' placeholder='Select recipient'>
                             <option value='' $selected>---</option>
                             <?php
-                            foreach($recipients as $recipient){
+                            foreach ($recipients as $recipient) {
                                 $selected   = '';
-                                if(isset($_POST['recipient']) && $_POST['recipient'] == $recipient){
+                                if (isset($_POST['recipient']) && $_POST['recipient'] == $recipient) {
                                     $selected   = 'selected="selected"';
                                 }
                                 echo "<option value='$recipient' $selected>$recipient</option>" ;
@@ -167,12 +167,12 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                     <button type="submit" class="button">Filter</button>
                 </div>
                 <p class="search-box">
-                    <input type="search" name="s" value="<?php echo $_POST['s'] ?? '';?>">                
+                    <input type="search" name="s" value="<?php echo $_POST['s'] ?? '';?>">
                     <input type="submit" id="search-submit" class="button" value="Search Emails" title="Search in subject and recipients">
                 </p>
             </form>
             <?php
-            if(empty($results)){
+            if (empty($results)) {
                 ?>
                 <p>There is nothing to show...</p>
                 <?php
@@ -185,7 +185,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                         <th>Recipient</th>
                         <th>Subject</th>
                         <?php
-                        if($_POST['type'] == 'link-clicked'){
+                        if ($_POST['type'] == 'link-clicked') {
                             ?>
                             <th>Url</th>
                             <?php
@@ -198,11 +198,11 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                     </tr>
                 </thead>
                 <?php
-                foreach($results as $result){
+                foreach ($results as $result) {
                     ?>
                     <tr>
                         <td>
-                            <?php echo gmdate(DATEFORMAT.' '.TIMEFORMAT, $result->time_send);?>
+                            <?php echo gmdate(DATEFORMAT. ' ' .TIMEFORMAT, $result->time_send);?>
                         </td>
                         <td>
                             <?php echo $result->recipients;?>
@@ -211,7 +211,7 @@ class AdminMenu extends ADMIN\SubAdminMenu{
                             <?php echo esc_attr($result->subject);?>
                         </td>
                         <?php
-                        if($_POST['type'] == 'link-clicked'){
+                        if ($_POST['type'] == 'link-clicked') {
                             ?>
                             <td>
                                 <?php echo $result->url;?>

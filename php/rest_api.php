@@ -1,13 +1,16 @@
 <?php
+
 namespace TSJIPPY\HTMLEMAIL;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
 add_action('rest_api_init',  __NAMESPACE__ . '\restApiInit');
-function restApiInit() {
+function restApiInit()
+{
     //Route for e-mail tracking of today
     register_rest_route(
         RESTAPIPREFIX,
@@ -16,8 +19,8 @@ function restApiInit() {
             'methods'                 => 'GET',
             'callback'                 => __NAMESPACE__ . '\mailTracker',
             'permission_callback'     => '__return_true',                    // Allow public access
-       )
-   );
+        )
+    );
 
     //Route for e-mail tracking of today
     register_rest_route(
@@ -27,8 +30,8 @@ function restApiInit() {
             'methods'                 => \WP_REST_Server::ALLMETHODS,
             'callback'                 => __NAMESPACE__ . '\mailTracking',
             'permission_callback'     => '__return_true',                    // Allow public access, this is just for testing purposes, we can change this later if we want to restrict access to this endpoint
-       )
-   );
+        )
+    );
 }
 
 /**
@@ -38,7 +41,8 @@ function restApiInit() {
  *
  * @return array    The parameters of the request, this is just for testing purposes, we can change this later to return something more useful if needed
  */
-function mailTracking($wpRestRequest) {
+function mailTracking($wpRestRequest)
+{
     //TSJIPPY\printArray($wpRestRequest->get_params());
     return $wpRestRequest->get_params();
 }
@@ -53,9 +57,10 @@ add_filter('tsjippy_allowed_rest_api_urls', __NAMESPACE__ . '\allowedRestApiUrls
  *
  * @return array    The updated list of allowed REST API URLs
  */
-function allowedRestApiUrls($urls) {
-    $urls[]    = RESTAPIPREFIX. '/mailtracker';
-    $urls[]    = RESTAPIPREFIX. '/mailfailed';
+function allowedRestApiUrls($urls)
+{
+    $urls[]    = RESTAPIPREFIX . '/mailtracker';
+    $urls[]    = RESTAPIPREFIX . '/mailfailed';
 
     return $urls;
 }
@@ -63,7 +68,8 @@ function allowedRestApiUrls($urls) {
 /**
  * Tracks if an e-mail is opened or not using an image with a url
  */
-function mailTracker(\WP_REST_Request $request) {
+function mailTracker(\WP_REST_Request $request)
+{
     global $wpdb;
 
     $mailId        = $request->get_param('mailid');
@@ -78,7 +84,7 @@ function mailTracker(\WP_REST_Request $request) {
         if (empty($url)) {
             $type    = 'mail-opened';
             $url    = '';
-        }else{
+        } else {
             $type    = 'link-clicked';
         }
 
@@ -92,8 +98,8 @@ function mailTracker(\WP_REST_Request $request) {
                 'type'            => $type,
                 'time'            => current_time('U'),
                 'url'            => str_replace(SITEURL, '', $url)
-           )
-       );
+            )
+        );
 
         if ($wpdb->last_error !== '') {
             TSJIPPY\printArray($wpdb->last_error);
@@ -102,7 +108,7 @@ function mailTracker(\WP_REST_Request $request) {
 
     if (empty($url)) {
         // redirect to non-existing page
-        $url = SITEURL. '/tsjippy-email-tracking';
+        $url = SITEURL . '/tsjippy-email-tracking';
     }
 
     wp_redirect($url);

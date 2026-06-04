@@ -1,12 +1,15 @@
 <?php
+
 namespace TSJIPPY\HTMLEMAIL;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
-class HtmlEmail{
+class HtmlEmail
+{
     public $mailTable;
     public $mailEventTable;
     public $mailTrackerUrl;
@@ -17,19 +20,21 @@ class HtmlEmail{
     public $emailId;
     public $footer;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $wpdb;
 
-        $this->mailTable        = $wpdb->prefix. "tsjippy_emails";
-        $this->mailEventTable   = $wpdb->prefix. "tsjippy_email_events";
-        $this->mailTrackerUrl   = SITEURL. "/wp-json/" .RESTAPIPREFIX. "/mailtracker";
+        $this->mailTable        = $wpdb->prefix . "tsjippy_emails";
+        $this->mailEventTable   = $wpdb->prefix . "tsjippy_email_events";
+        $this->mailTrackerUrl   = SITEURL . "/wp-json/" . RESTAPIPREFIX . "/mailtracker";
     }
 
     /**
      * Creates the tables for this plugin
      */
-    public function createDbTables() {
-        if ( !function_exists('maybe_create_table')) {
+    public function createDbTables()
+    {
+        if (!function_exists('maybe_create_table')) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         }
 
@@ -64,18 +69,19 @@ class HtmlEmail{
     /**
      * Store the e-mail in the db for statistics
      */
-    private function storeEmail() {
+    private function storeEmail()
+    {
         global $wpdb;
         if (SETTINGS['no-statistics']) {
             // Add e-mail to e-mails db
             $wpdb->insert(
-                $this->mailTable ,
+                $this->mailTable,
                 array(
-                    'subject'        => $this->subject ,
+                    'subject'        => $this->subject,
                     'recipients'    => $this->recipients,
                     'time_send'     => current_time('U')
-               )
-           );
+                )
+            );
 
             $this->emailId   = $wpdb->insert_id;
         }
@@ -88,7 +94,8 @@ class HtmlEmail{
      *
      * @return  array           The filtered args
      */
-    public function filterMail($args) {
+    public function filterMail($args)
+    {
         $this->subject      = &$args['subject'];
 
         $this->recipients   = &$args['to'];
@@ -96,7 +103,7 @@ class HtmlEmail{
         //Do not send an e-mail when the adres contains .empty, or is localhost or is staging
         $empty  = false;
         if (is_array($this->recipients)) {
-            foreach ($this->recipients as $index=>$recipient) {
+            foreach ($this->recipients as $index => $recipient) {
                 if (str_contains($recipient, ' .empty')) {
                     unset($this->recipients[$index]);
                 }
@@ -104,10 +111,10 @@ class HtmlEmail{
 
             if (empty($this->recipients)) {
                 $empty  = true;
-            }else{
+            } else {
                 $this->recipients   = implode(',', $this->recipients);
             }
-        }elseif (str_contains($this->recipients, ' .empty')) {
+        } elseif (str_contains($this->recipients, ' .empty')) {
             $empty  = true;
         }
 
@@ -125,7 +132,7 @@ class HtmlEmail{
 
         if (is_array($this->message)) {
             TSJIPPY\printArray($this->message);
-        }else{
+        } else {
             $this->message = trim($this->message ?? '');
         }
 
@@ -152,14 +159,14 @@ class HtmlEmail{
             // Send an e-mail with the remaining e-mails
             $explode    = explode(' - ', $this->subject);
             if (is_numeric(end($explode))) {
-                $number = end($explode) +1;
+                $number = end($explode) + 1;
 
                 // remove the last element
                 array_pop($explode);
 
                 // Build the subject again without the last number
-                $subject    = implode(' ', $explode). ' - ' .$number;
-            }else{
+                $subject    = implode(' ', $explode) . ' - ' . $number;
+            } else {
                 $subject    = "$this->subject - 1";
             }
 
@@ -183,8 +190,8 @@ class HtmlEmail{
             !str_contains(strtolower($this->message), 'regards,') &&
             !str_contains(strtolower($this->message), 'blessings,') &&
             !str_contains(strtolower($this->message), 'cheers,')
-       ) {
-            $this->message    .= "<br><br>$defaultGreeting<br><br>" .SITENAME;
+        ) {
+            $this->message    .= "<br><br>$defaultGreeting<br><br>" . SITENAME;
         }
 
         // Mention that this is an automated message
@@ -212,7 +219,8 @@ class HtmlEmail{
      *
      * @return  string              Replace html
      */
-    public function checkEmailImages($matches) {
+    public function checkEmailImages($matches)
+    {
         if (empty($matches)) {
             return false;
         }
@@ -247,7 +255,8 @@ class HtmlEmail{
      *
      * @return  string              Replace html
      */
-    public function urlReplace($matches) {
+    public function urlReplace($matches)
+    {
         if (empty($matches) || !SETTINGS['no-statistics'] ?? false) {
             return false;
         }
@@ -265,7 +274,7 @@ class HtmlEmail{
 
 
         // Change to rest-api url
-        $newUrl    = "$this->mailTrackerUrl?mailid=$this->emailId&url=" .urlencode($url);
+        $newUrl    = "$this->mailTrackerUrl?mailid=$this->emailId&url=" . urlencode($url);
 
         $html        = str_replace($url, $newUrl, $html);
 
@@ -275,11 +284,12 @@ class HtmlEmail{
     /**
      * Converts plain text e-mail message to html
      */
-    public function htmlEmail() {
+    public function htmlEmail()
+    {
         // Get the logo url and make public if private
         $headerImageId    = SETTINGS['picture-ids']['header_image'] ?? false;
         if (!$headerImageId) {
-            $headerImageId= get_theme_mod('custom_logo');
+            $headerImageId = get_theme_mod('custom_logo');
         }
         $logoUrl    = wp_get_attachment_url($headerImageId);
 
@@ -299,59 +309,82 @@ class HtmlEmail{
         }
 
         ob_start();
-        ?>
+?>
         <!doctype html>
         <html lang="en">
-            <head>
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width">
-                <title><?php echo esc_attr($this->subject);?></title>
-                <style type="text/css">@media only screen and (max-width: 599px) {table.body .container {width: 95% !important;}.header {padding: 15px 15px 12px 15px !important;}.header img {width: 200px !important;height: auto !important;}.content, .aside {padding: 30px 40px 20px 40px !important;}}</style>
-            </head>
-            <body style="height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #f1f1f1; text-align: center;">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" class="body" style="border-collapse: collapse; border-spacing: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; background-color: #f1f1f1; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%;">
-                    <tr style="padding: 0; vertical-align: top; text-align: left;">
-                        <td align="center" valign="top" class="body-inner" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center;">
-                            <!-- Container -->
-                            <table border="0" cellpadding="0" cellspacing="0" class="container" style="border-collapse: collapse; border-spacing: 0; padding: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 600px; margin: 0 auto 30px auto; Margin: 0 auto 30px auto; text-align: inherit;">
-                                <!-- Header -->
-                                <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                    <td align="center" valign="middle" class="header" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center; padding: 30px 30px 22px 30px;">
-                                        <a href="<?php echo SITEURL;?>"><img src="<?php echo esc_attr($logoUrl);?>" alt="Site Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 250px;"></a>
-                                    </td>
-                                </tr>
-                                <!-- Content -->
-                                <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                    <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #ffffff; padding: 60px 75px 45px 75px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd;">
-                                        <h1 style="color:#241c15;font-family:Georgia,Times,'Times New Roman',serif;font-size:28px;font-style:normal;font-weight:400;line-height:36px;letter-spacing:normal;margin:0px 0px 20px 0px;padding:0;text-align:center">
-                                            <?php echo esc_attr($this->subject);?>
-                                        </h1>
-                                        <?php echo $message;?>
-                                    </td>
-                                </tr>
-                                <!-- Footer -->
-                                <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                    <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
-                                        <?php
-                                        echo apply_filters('tsjippy_email_footer', $this->footer, $this->message);
 
-                                        if (SETTINGS['no-statistics'] ?? false) {
-                                            $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width">
+            <title><?php echo esc_attr($this->subject); ?></title>
+            <style type="text/css">
+                @media only screen and (max-width: 599px) {
+                    table.body .container {
+                        width: 95% !important;
+                    }
 
-                                            echo "<img src='$url' alt=' . ' width='1px' height='1px'>";
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </body>
+                    .header {
+                        padding: 15px 15px 12px 15px !important;
+                    }
+
+                    .header img {
+                        width: 200px !important;
+                        height: auto !important;
+                    }
+
+                    .content,
+                    .aside {
+                        padding: 30px 40px 20px 40px !important;
+                    }
+                }
+            </style>
+        </head>
+
+        <body style="height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #f1f1f1; text-align: center;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" class="body" style="border-collapse: collapse; border-spacing: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; background-color: #f1f1f1; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%;">
+                <tr style="padding: 0; vertical-align: top; text-align: left;">
+                    <td align="center" valign="top" class="body-inner" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center;">
+                        <!-- Container -->
+                        <table border="0" cellpadding="0" cellspacing="0" class="container" style="border-collapse: collapse; border-spacing: 0; padding: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 600px; margin: 0 auto 30px auto; Margin: 0 auto 30px auto; text-align: inherit;">
+                            <!-- Header -->
+                            <tr style="padding: 0; vertical-align: top; text-align: left;">
+                                <td align="center" valign="middle" class="header" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center; padding: 30px 30px 22px 30px;">
+                                    <a href="<?php echo SITEURL; ?>"><img src="<?php echo esc_attr($logoUrl); ?>" alt="Site Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 250px;"></a>
+                                </td>
+                            </tr>
+                            <!-- Content -->
+                            <tr style="padding: 0; vertical-align: top; text-align: left;">
+                                <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #ffffff; padding: 60px 75px 45px 75px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd;">
+                                    <h1 style="color:#241c15;font-family:Georgia,Times,'Times New Roman',serif;font-size:28px;font-style:normal;font-weight:400;line-height:36px;letter-spacing:normal;margin:0px 0px 20px 0px;padding:0;text-align:center">
+                                        <?php echo esc_attr($this->subject); ?>
+                                    </h1>
+                                    <?php echo $message; ?>
+                                </td>
+                            </tr>
+                            <!-- Footer -->
+                            <tr style="padding: 0; vertical-align: top; text-align: left;">
+                                <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
+                                    <?php
+                                    echo apply_filters('tsjippy_email_footer', $this->footer, $this->message);
+
+                                    if (SETTINGS['no-statistics'] ?? false) {
+                                        $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";
+
+                                        echo "<img src='$url' alt=' . ' width='1px' height='1px'>";
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+
         </html>
 
-        <?php
+<?php
         $this->message = ob_get_clean();
     }
 
@@ -360,7 +393,8 @@ class HtmlEmail{
      *
      * @return  object      all query results
      */
-    public function getEmailStatistics() {
+    public function getEmailStatistics()
+    {
         global $wpdb;
 
         $query      =  "SELECT ";
@@ -368,7 +402,7 @@ class HtmlEmail{
 
         if (isset($_POST['type']) && $_POST['type'] == 'link-clicked') {
             $type       = 'link-clicked';
-        }else{
+        } else {
             $type       = 'mail-opened';
             $query     .= "COUNT(events.email_id) AS viewcount, ";
         }
@@ -385,25 +419,25 @@ class HtmlEmail{
         if (empty($_POST)) {
             $query  .= "AND emails.time_send >= %s";
             $vars[] = strtotime("-7 days");
-        }elseif (!empty($_POST['s']) || isset($_POST['recipient'])) {
+        } elseif (!empty($_POST['s']) || isset($_POST['recipient'])) {
             if (isset($_POST['recipient'])) {
                 $search  = sanitize_text_field(wp_unslash($_POST['recipient']));
-            }else{
+            } else {
                 $search  = sanitize_text_field(wp_unslash($_POST['s']));
             }
 
             $query  .= "AND emails.recipients LIKE %s OR emails.subject LIKE %s";
             $vars[] = "%{$wpdb->esc_like($search)}%";
             $vars[] = "%{$wpdb->esc_like($search)}%";
-        }else{
+        } else {
             if (!empty($_POST['date'])) {
                 $maxTime   = strtotime($_POST['date']);
-            }elseif (!empty($_POST['date-start'])) {
+            } elseif (!empty($_POST['date-start'])) {
                 $maxTime   = strtotime($_POST['date-start']);
-            }else{
+            } else {
                 if (empty($_POST['timespan'])) {
                     $timespan   = '7';
-                }else{
+                } else {
                     $timespan   = (int) $_POST['timespan'];
                 }
 
@@ -430,7 +464,8 @@ class HtmlEmail{
     /**
      * Clear all e-mail tables
      */
-    public function clearTables() {
+    public function clearTables()
+    {
         global $wpdb;
 
         $wpdb->query("TRUNCATE $this->mailTable");

@@ -1,8 +1,10 @@
 <?php
+
 namespace TSJIPPY\HTMLEMAIL;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -14,7 +16,8 @@ add_filter('wp_mail', __NAMESPACE__ . '\mailFilter', 10, 1);
  * @param array $args The arguments passed to wp_mail().
  * @return array The modified arguments.
  */
-function mailFilter($args) {
+function mailFilter($args)
+{
     $html     = new HtmlEmail();
     $args     = $html->filterMail($args);
 
@@ -32,14 +35,15 @@ add_filter('pre_wp_mail', __NAMESPACE__ . '\beforeMail', 99, 2);
  *
  * @return bool Whether to short-circuit wp_mail() and return a result instead.
  */
-function beforeMail($shouldSkip, $atts) {
+function beforeMail($shouldSkip, $atts)
+{
     if (
         empty($atts['to'])        ||
         (
             !empty(SETTINGS['no-localhost']) &&
             wp_get_environment_type() === 'local'
-       )
-   ) {
+        )
+    ) {
         return true;
     }
 
@@ -53,7 +57,8 @@ add_action('wp_mail_failed', __NAMESPACE__ . '\onMailFailed');
  *
  * @param \WP_Error $wpError The error object.
  */
-function onMailFailed($wpError) {
+function onMailFailed($wpError)
+{
     if (!isset($wpError->errors['wp_mail_failed'][0]) || $wpError->errors['wp_mail_failed'][0] != 'You must provide at least one recipient email address. ') {
         TSJIPPY\printArray($wpError);
     }
@@ -67,14 +72,16 @@ add_action('wp_mail_smtp_mailcatcher_send_failed', __NAMESPACE__ . '\mailCatcher
  * @param object $instance The mail instance.
  * @param object $mailMailer The mailer object.
  */
-function mailCatcher($errorMessage, $instance, $mailMailer) {
+function mailCatcher($errorMessage, $instance, $mailMailer)
+{
     TSJIPPY\printArray($errorMessage);
     TSJIPPY\printArray($instance);
     TSJIPPY\printArray($mailMailer);
 }
 
 add_shortcode('email_stats', __NAMESPACE__ . '\emailStats');
-function emailStats() {
+function emailStats()
+{
     $adminMenu  = new AdminMenu(SETTINGS, 'e-mail');
 
     return $adminMenu->emailStats();

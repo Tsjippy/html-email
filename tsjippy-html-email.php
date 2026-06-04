@@ -1,5 +1,7 @@
 <?php
+
 namespace TSJIPPY\HTMLEMAIL;
+
 use TSJIPPY;
 
 /**
@@ -20,7 +22,7 @@ use TSJIPPY;
  *
  * @author Ewald Harmsen
  */
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -34,8 +36,8 @@ define(__NAMESPACE__ . '\PLUGINSLUG', str_replace('tsjippy-', '', basename(__FIL
 define(__NAMESPACE__ . '\SETTINGS', get_option('tsjippy_htmlemail_settings', []));
 
 // run right before activation
-add_action('activated_plugin', function ( $plugin) {
-    if ( $plugin != PLUGIN) {
+add_action('activated_plugin', function ($plugin) {
+    if ($plugin != PLUGIN) {
         return;
     }
 
@@ -43,4 +45,3 @@ add_action('activated_plugin', function ( $plugin) {
     $email     = new HtmlEmail();
     $email->createDbTables();
 });
-

@@ -9,6 +9,7 @@
 
 ### Fixed
 - spacing problem
+- foreach error
 
 ### Updated
 

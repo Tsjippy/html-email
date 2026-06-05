@@ -2,6 +2,7 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+- shared functionality loader
 
 ### Changed
 - comply to coding standards

@@ -104,7 +104,7 @@ class HtmlEmail
         $empty  = false;
         if (is_array($this->recipients)) {
             foreach ($this->recipients as $index => $recipient) {
-                if (str_contains($recipient, ' .empty')) {
+                if (str_contains($recipient, '.empty')) {
                     unset($this->recipients[$index]);
                 }
             }
@@ -114,7 +114,7 @@ class HtmlEmail
             } else {
                 $this->recipients   = implode(',', $this->recipients);
             }
-        } elseif (str_contains($this->recipients, ' .empty')) {
+        } elseif (str_contains($this->recipients, '.empty')) {
             $empty  = true;
         }
 

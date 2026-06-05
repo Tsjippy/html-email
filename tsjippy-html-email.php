@@ -16,7 +16,7 @@ use TSJIPPY;
  * Plugin URI:            https://github.com/Tsjippy/htmlemail/
  * Tested:                6.9
  * TextDomain:            tsjippy
- * Requires Plugins:    tsjippy-shared-functionality
+ * Requires Plugins:    
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
@@ -45,3 +45,8 @@ add_action('activated_plugin', function ($plugin) {
     $email     = new HtmlEmail();
     $email->createDbTables();
 });
+
+// Load shared code
+if(file_exists(__DIR__  . '/shared_functionality/loader.php')){
+    require_once(__DIR__  . '/shared_functionality/loader.php');
+}

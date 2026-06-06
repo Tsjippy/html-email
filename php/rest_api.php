@@ -13,7 +13,7 @@ function restApiInit()
 {
     //Route for e-mail tracking of today
     register_rest_route(
-        RESTAPIPREFIX,
+        TSJIPPY\RESTAPIPREFIX,
         '/mailtracker',
         array(
             'methods'                 => 'GET',
@@ -24,7 +24,7 @@ function restApiInit()
 
     //Route for e-mail tracking of today
     register_rest_route(
-        RESTAPIPREFIX,
+        TSJIPPY\RESTAPIPREFIX,
         '/mailfailed',
         array(
             'methods'                 => \WP_REST_Server::ALLMETHODS,
@@ -59,8 +59,8 @@ add_filter('tsjippy_allowed_rest_api_urls', __NAMESPACE__ . '\allowedRestApiUrls
  */
 function allowedRestApiUrls($urls)
 {
-    $urls[]    = RESTAPIPREFIX . '/mailtracker';
-    $urls[]    = RESTAPIPREFIX . '/mailfailed';
+    $urls[]    = TSJIPPY\RESTAPIPREFIX . '/mailtracker';
+    $urls[]    = TSJIPPY\RESTAPIPREFIX . '/mailfailed';
 
     return $urls;
 }
@@ -97,7 +97,7 @@ function mailTracker(\WP_REST_Request $request)
                 'email_id'        => $mailId,
                 'type'            => $type,
                 'time'            => current_time('U'),
-                'url'            => str_replace(SITEURL, '', $url)
+                'url'            => str_replace(TSJIPPY\SITEURL, '', $url)
             )
         );
 
@@ -108,7 +108,7 @@ function mailTracker(\WP_REST_Request $request)
 
     if (empty($url)) {
         // redirect to non-existing page
-        $url = SITEURL . '/tsjippy-email-tracking';
+        $url = TSJIPPY\SITEURL . '/tsjippy-email-tracking';
     }
 
     wp_redirect($url);

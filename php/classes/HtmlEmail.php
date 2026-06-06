@@ -26,7 +26,7 @@ class HtmlEmail
 
         $this->mailTable        = $wpdb->prefix . "tsjippy_emails";
         $this->mailEventTable   = $wpdb->prefix . "tsjippy_email_events";
-        $this->mailTrackerUrl   = SITEURL . "/wp-json/" . RESTAPIPREFIX . "/mailtracker";
+        $this->mailTrackerUrl   = TSJIPPY\SITEURL . "/wp-json/" . TSJIPPY\RESTAPIPREFIX . "/mailtracker";
     }
 
     /**
@@ -191,13 +191,13 @@ class HtmlEmail
             !str_contains(strtolower($this->message), 'blessings,') &&
             !str_contains(strtolower($this->message), 'cheers,')
         ) {
-            $this->message    .= "<br><br>$defaultGreeting<br><br>" . SITENAME;
+            $this->message    .= "<br><br>$defaultGreeting<br><br>" . TSJIPPY\SITENAME;
         }
 
         // Mention that this is an automated message
         $footerUrl     = apply_filters('tsjippy_email_footer_url', [
-            'url'   => SITEURL,
-            'text'  => SITEURL
+            'url'   => TSJIPPY\SITEURL,
+            'text'  => TSJIPPY\SITEURL
         ]);
 
         $url            = $footerUrl['url'];
@@ -350,7 +350,7 @@ class HtmlEmail
                             <!-- Header -->
                             <tr style="padding: 0; vertical-align: top; text-align: left;">
                                 <td align="center" valign="middle" class="header" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center; padding: 30px 30px 22px 30px;">
-                                    <a href="<?php echo SITEURL; ?>"><img src="<?php echo esc_attr($logoUrl); ?>" alt="Site Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 250px;"></a>
+                                    <a href="<?php echo TSJIPPY\SITEURL; ?>"><img src="<?php echo esc_attr($logoUrl); ?>" alt="Site Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 250px;"></a>
                                 </td>
                             </tr>
                             <!-- Content -->

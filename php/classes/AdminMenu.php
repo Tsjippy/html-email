@@ -117,7 +117,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
             }
         }
 
-        $timeSpan       = sanitize_text_field(wp_unslash($_POST['timespan'] ?? ''));
+        $timeSpan       = TSJIPPY\sanitize($_POST['timespan'] ?? '');
 
         ?>
         <script>
@@ -159,21 +159,21 @@ class AdminMenu extends ADMIN\SubAdminMenu
                                                 } ?>>Custom Date Range</option>
                     </select>
 
-                    <input type="date" name="date" class="" value="<?php echo $_POST['date'] ?? ''; ?>" <?php if ($timeSpan != "after") {
+                    <input type="date" name="date" class="" value="<?php echo TSJIPPY\sanitize($_POST['date'] ?? ''); ?>" <?php if ($timeSpan != "after") {
                                                                                                             echo 'style="display:none;"';
                                                                                                         } ?>>
 
                     <span id="querydates" <?php if ($timeSpan != "custom") {
                                                 echo 'style="display:none;"';
                                             } ?>>
-                        Between <input type="date" name="date-start" class="" value="<?php echo $_POST['date-start'] ?? ''; ?>">
-                        and <input type="date" name="date-end" class="" value="<?php echo $_POST['date-end'] ?? ''; ?>">
+                        Between <input type="date" name="date-start" class="" value="<?php echo TSJIPPY\sanitize($_POST['date-start'] ?? ''); ?>">
+                        and <input type="date" name="date-end" class="" value="<?php echo TSJIPPY\sanitize($_POST['date-end'] ?? ''); ?>">
 
                     </span>
 
                     <select name="type" class="nonice">
                         <option value="mail-opened">Openend</option>
-                        <option value="link-clicked" <?php if (isset($_POST['type']) && $_POST['type'] == "link-clicked") {
+                        <option value="link-clicked" <?php if (($_POST['type'] ?? '') == "link-clicked") {
                                                             echo 'selected';
                                                         } ?>>Clicked links</option>
                     </select>
@@ -186,7 +186,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
                             <?php
                             foreach ($recipients as $recipient) {
                                 $selected   = '';
-                                if (isset($_POST['recipient']) && $_POST['recipient'] == $recipient) {
+                                if (($_POST['recipient'] ?? '') == $recipient) {
                                     $selected   = 'selected="selected"';
                                 }
                                 echo "<option value='$recipient' $selected>$recipient</option>";
@@ -200,7 +200,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
                     <button type="submit" class="button">Filter</button>
                 </div>
                 <p class="search-box">
-                    <input type="search" name="s" value="<?php echo $_POST['s'] ?? ''; ?>">
+                    <input type="search" name="s" value="<?php echo TSJIPPY\sanitize($_POST['s'] ?? ''); ?>">
                     <input type="submit" id="search-submit" class="button" value="Search Emails" title="Search in subject and recipients">
                 </p>
             </form>
@@ -218,7 +218,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
                             <th>Recipient</th>
                             <th>Subject</th>
                             <?php
-                            if ($_POST['type'] == 'link-clicked') {
+                            if (($_POST['type'] ?? '') == 'link-clicked') {
                             ?>
                                 <th>Url</th>
                             <?php
@@ -244,7 +244,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
                                 <?php echo esc_attr($result->subject); ?>
                             </td>
                             <?php
-                            if ($_POST['type'] == 'link-clicked') {
+                            if (($_POST['type'] ?? '') == 'link-clicked') {
                             ?>
                                 <td>
                                     <?php echo $result->url; ?>

@@ -400,7 +400,7 @@ class HtmlEmail
         $query      =  "SELECT ";
         $vars       = [];
 
-        if (isset($_POST['type']) && $_POST['type'] == 'link-clicked') {
+        if (($_POST['type'] ?? '') == 'link-clicked') {
             $type       = 'link-clicked';
         } else {
             $type       = 'mail-opened';
@@ -421,9 +421,9 @@ class HtmlEmail
             $vars[] = strtotime("-7 days");
         } elseif (!empty($_POST['s']) || isset($_POST['recipient'])) {
             if (isset($_POST['recipient'])) {
-                $search  = sanitize_text_field(wp_unslash($_POST['recipient']));
+                $search  = TSJIPPY\sanitize($_POST['recipient']);
             } else {
-                $search  = sanitize_text_field(wp_unslash($_POST['s']));
+                $search  = TSJIPPY\sanitize($_POST['s']);
             }
 
             $query  .= "AND emails.recipients LIKE %s OR emails.subject LIKE %s";
@@ -431,9 +431,9 @@ class HtmlEmail
             $vars[] = "%{$wpdb->esc_like($search)}%";
         } else {
             if (!empty($_POST['date'])) {
-                $maxTime   = strtotime($_POST['date']);
+                $maxTime   = strtotime(TSJIPPY\sanitize($_POST['date']));
             } elseif (!empty($_POST['date-start'])) {
-                $maxTime   = strtotime($_POST['date-start']);
+                $maxTime   = strtotime(TSJIPPY\sanitize($_POST['date-start']));
             } else {
                 if (empty($_POST['timespan'])) {
                     $timespan   = '7';
@@ -447,7 +447,7 @@ class HtmlEmail
             $vars[] = $maxTime;
 
             if (!empty($_POST['date-end'])) {
-                $maxTime    = strtotime($_POST['date-end']);
+                $maxTime    = strtotime(TSJIPPY\sanitize($_POST['date-end']));
                 $query  .= " AND emails.time_send <= %s";
                 $vars[] = $maxTime;
             }

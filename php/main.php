@@ -79,7 +79,7 @@ function mailCatcher($errorMessage, $instance, $mailMailer)
     TSJIPPY\printArray($mailMailer);
 }
 
-add_shortcode('email_stats', __NAMESPACE__ . '\emailStats');
+add_shortcode('tsjippy_email_stats', __NAMESPACE__ . '\emailStats');
 function emailStats()
 {
     $adminMenu  = new AdminMenu(SETTINGS, 'e-mail');

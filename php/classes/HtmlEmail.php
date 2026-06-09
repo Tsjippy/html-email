@@ -240,7 +240,7 @@ class HtmlEmail
             $hash   = md5($str);
 
             // store hash in db for a month
-            set_transient($hash, basename($url), MONTH_IN_SECONDS);
+            set_transient("tsjippy_$hash", basename($url), MONTH_IN_SECONDS);
 
             $html        = str_replace($url, "$url?imagehash=$hash", $html);
         }

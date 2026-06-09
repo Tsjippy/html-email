@@ -92,6 +92,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
     {
         //Load js
         wp_enqueue_script('tsjippy_table_script');
+        wp_enqueue_script('tsjippy_html_email_admin_script', TSJIPPY\pathToUrl(PLUGINPATH . 'js/admin.min.js'), array(), PLUGINVERSION, true);
 
         $email     = new HtmlEmail();
 
@@ -120,21 +121,6 @@ class AdminMenu extends ADMIN\SubAdminMenu
         $timeSpan       = TSJIPPY\sanitize($_POST['timespan'] ?? '');
 
         ?>
-        <script>
-            function showdatefields(target) {
-                document.getElementById('querydates').style.display = 'none';
-                document.getElementById('querydates').querySelectorAll('input').forEach(el => el.value = '');
-
-                target.closest('div').querySelector('[name="date"]').style.display = 'none';
-                target.closest('div').querySelector('[name="date"]').value = '';
-
-                if (target.value == 'after') {
-                    target.closest('div').querySelector('[name="date"]').style.display = '';
-                } else if (target.value == 'custom') {
-                    document.getElementById('querydates').style.display = '';
-                }
-            }
-        </script>
         <h2>E-mail statistics</h2>
         <div class='table-wrapper'>
             <form method="POST" action="">

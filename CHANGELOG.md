@@ -2,6 +2,17 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Updated
+
+## [10.1.7] - 2026-06-09
+
+
+### Added
 - shared functionality loader
 
 ### Changed
@@ -14,8 +25,6 @@
 - spacing problem
 - foreach error
 - space before dot bug
-
-### Updated
 
 ## [10.1.6] - 2026-06-03
 

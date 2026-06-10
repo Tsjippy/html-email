@@ -30,10 +30,10 @@ add_filter('pre_wp_mail', __NAMESPACE__ . '\beforeMail', 99, 2);
  * Filter whether to short-circuit wp_mail() and return a result instead.
  * This is used primarily to short-circuit wp_mail() when there are no recipients, but can be used for other purposes as well.
  *
- * @param bool $shouldSkip Whether to short-circuit wp_mail() and return a result instead. Default false.
- * @param array $atts The arguments passed to wp_mail(), including 'to', 'subject', 'message', and 'headers' .
+ * @param bool  $shouldSkip Whether to short-circuit wp_mail() and return a result instead. Default false.
+ * @param array $atts       The arguments passed to wp_mail(), including 'to', 'subject', 'message', and 'headers' .
  *
- * @return bool Whether to short-circuit wp_mail() and return a result instead.
+ * @return bool             Whether to short-circuit wp_mail() and return a result instead.
  */
 function beforeMail($shouldSkip, $atts)
 {

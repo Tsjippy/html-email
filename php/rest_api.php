@@ -94,10 +94,10 @@ function mailTracker(\WP_REST_Request $request)
         $wpdb->insert(
             $html->mailEventTable,
             array(
-                'email_id'        => $mailId,
-                'type'            => $type,
-                'time'            => current_time('U'),
-                'url'            => str_replace(TSJIPPY\SITEURL, '', $url)
+                'email_id' => $mailId,
+                'type'     => $type,
+                'time'     => current_time('U'),
+                'url'      => str_replace(TSJIPPY\SITEURL, '', $url)
             )
         );
 

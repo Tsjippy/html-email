@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- shared code loader
 
 ### Updated
+
+## [10.1.9] - 2026-06-13
+
+
+### Fixed
+- shared code loader
 
 ## [10.1.8] - 2026-06-11
 

@@ -48,7 +48,7 @@ function mailTracking($wpRestRequest)
 }
 
 // Make mailtracker rest api url publicy available
-add_filter('tsjippy_allowed_rest_api_urls', __NAMESPACE__ . '\allowedRestApiUrls');
+add_filter('tsjippy-allowed-rest-api-urls', __NAMESPACE__ . '\allowedRestApiUrls');
 
 /**
  * Adds the mail tracker URLs to the list of allowed REST API URLs

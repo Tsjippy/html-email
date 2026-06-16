@@ -195,7 +195,7 @@ class HtmlEmail
         }
 
         // Mention that this is an automated message
-        $footerUrl     = apply_filters('tsjippy_email_footer_url', [
+        $footerUrl     = apply_filters('tsjippy-email-footer-url', [
             'url'   => TSJIPPY\SITEURL,
             'text'  => TSJIPPY\SITEURL
         ]);
@@ -366,7 +366,7 @@ class HtmlEmail
                             <tr style="padding: 0; vertical-align: top; text-align: left;">
                                 <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
                                     <?php
-                                    echo apply_filters('tsjippy_email_footer', $this->footer, $this->message);
+                                    echo apply_filters('tsjippy-email-footer', $this->footer, $this->message);
 
                                     if (SETTINGS['no-statistics'] ?? false) {
                                         $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";

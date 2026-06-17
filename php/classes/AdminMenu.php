@@ -111,7 +111,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
 
         // create an array of unique recipient e-mail addresses
         foreach ($results as $result) {
-            foreach (explode(',', $result->recipients) as $r) {
+            foreach (explode(',', $result->recipients ?? '') as $r) {
                 if (!in_array($r, $recipients)) {
                     $recipients[]   = $r;
                 }
@@ -224,10 +224,10 @@ class AdminMenu extends ADMIN\SubAdminMenu
                                 <?php echo gmdate(TSJIPPY\DATEFORMAT . ' ' . TSJIPPY\TIMEFORMAT, $result->time_send); ?>
                             </td>
                             <td>
-                                <?php echo $result->recipients; ?>
+                                <?php echo $result->recipients ?? ''; ?>
                             </td>
                             <td>
-                                <?php echo esc_attr($result->subject); ?>
+                                <?php echo esc_attr($result->subject ?? ''); ?>
                             </td>
                             <?php
                             if (($_POST['type'] ?? '') == 'link-clicked') {

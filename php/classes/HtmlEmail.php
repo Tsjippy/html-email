@@ -397,24 +397,24 @@ class HtmlEmail
     {
         global $wpdb;
 
-        $query      =  "SELECT ";
-        $vars       = [];
+        $query     =  "SELECT ";
+        $vars      = [];
 
         if (($_POST['type'] ?? '') == 'link-clicked') {
-            $type       = 'link-clicked';
+            $type  = 'link-clicked';
         } else {
-            $type       = 'mail-opened';
-            $query     .= "COUNT(events.email_id) AS viewcount, ";
+            $type  = 'mail-opened';
+            $query .= "COUNT(events.email_id) AS viewcount, ";
         }
 
-        $query      .= "events.url, events.type, emails.recipients, emails.time_send, emails.subject FROM %i as emails";
-        $vars[]     = $this->mailTable;
+        $query    .= "events.url, events.type, emails.recipients, emails.time_send, emails.subject FROM %i as emails";
+        $vars[]    = $this->mailTable;
 
-        $query      .= " LEFT JOIN %i as events ON events.email_id=emails.id";
-        $vars[]     = $this->mailEventTable;
+        $query    .= " LEFT JOIN %i as events ON events.email_id=emails.id";
+        $vars[]    = $this->mailEventTable;
 
-        $query      .= " WHERE events.type = %s ";
-        $vars[]     = $type;
+        $query    .= " WHERE events.type = %s ";
+        $vars[]    = $type;
 
         if (empty($_POST)) {
             $query  .= "AND emails.time_send >= %s";
@@ -454,7 +454,7 @@ class HtmlEmail
         }
 
         if ($type != 'link-clicked') {
-            $query  .= " GROUP BY emails.id";
+            $query  .= " GROUP BY emails.id, events.url";
         }
         $query  .= " ORDER BY emails.time_send DESC";
 

@@ -7,6 +7,7 @@
 - hook and filter name update
 
 ### Fixed
+- query
 
 ### Updated
 

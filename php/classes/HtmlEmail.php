@@ -236,7 +236,7 @@ class HtmlEmail
         // add a hash so image is also readible when not logged in
         if (str_contains($url, '/private/')) {
             // create the random string
-            $str    = rand();
+            $str    = wp_rand();
             $hash   = md5($str);
 
             // store hash in db for a month

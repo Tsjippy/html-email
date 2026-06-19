@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- use wp_rand
 
 ### Fixed
 
 ### Updated
+
+## [10.2.6] - 2026-06-19
+
+
+### Changed
+- use wp_rand
 
 ## [10.2.5] - 2026-06-18
 

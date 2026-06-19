@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- use wp_rand
 
 ### Fixed
 

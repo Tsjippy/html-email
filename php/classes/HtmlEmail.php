@@ -145,14 +145,18 @@ class HtmlEmail
         }
 
         // check if the total attachment size is past the limit
-        foreach ($args['attachments'] as $index => $attach) {
-            $totalSize   += filesize($attach);
+        if(is_array($args['attachments'])){
+            foreach ($args['attachments'] as $index => $attach) {
+                $totalSize   += filesize($attach);
 
-            // if this is more than the limit
-            if (number_format($totalSize / 1048576, 2) >= $maxSize) {
-                $remaining[]    = $attach;
-                unset($args['attachments'][$index]);
+                // if this is more than the limit
+                if (number_format($totalSize / 1048576, 2) >= $maxSize) {
+                    $remaining[]    = $attach;
+                    unset($args['attachments'][$index]);
+                }
             }
+        }else{
+            TSJIPPY\printArray($args);
         }
 
         if (!empty($remaining)) {

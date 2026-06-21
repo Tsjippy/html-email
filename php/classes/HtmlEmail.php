@@ -462,7 +462,7 @@ class HtmlEmail
         }
         $query  .= " ORDER BY emails.time_send DESC";
 
-        return TSJIPPY\getFromDb('email-stats', $query, $vars);
+        return TSJIPPY\getFromDb('email-stats', 'html-email', $query, $vars);
     }
 
     /**

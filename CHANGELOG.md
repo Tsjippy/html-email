@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- bug when attachments is not an array
 
 ### Updated
+
+## [10.2.8] - 2026-06-21
+
+
+### Fixed
+- bug when attachments is not an array
 
 ## [10.2.7] - 2026-06-20
 

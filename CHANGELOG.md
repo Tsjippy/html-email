@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- bug when attachments is not an array
 
 ### Updated
 

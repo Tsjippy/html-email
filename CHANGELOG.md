@@ -5,6 +5,7 @@
 
 ### Changed
 - implemented db cache group by plugin
+- implemented db caching
 
 ### Fixed
 

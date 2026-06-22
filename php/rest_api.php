@@ -91,19 +91,22 @@ function mailTracker(\WP_REST_Request $request)
         $html     = new HtmlEmail();
 
         // Add e-mail to e-mails db
-        $wpdb->insert(
+        TSJIPPY\insertInDb(
             $html->mailEventTable,
             array(
                 'email_id' => $mailId,
                 'type'     => $type,
                 'time'     => current_time('U'),
                 'url'      => str_replace(TSJIPPY\SITEURL, '', $url)
-            )
+            ),
+            [
+                '%d',
+                '%s',
+                '%d',
+                '%s'
+            ],
+            'html-email'
         );
-
-        if ($wpdb->last_error !== '') {
-            TSJIPPY\printArray($wpdb->last_error);
-        }
     }
 
     if (empty($url)) {

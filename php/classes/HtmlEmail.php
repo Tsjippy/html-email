@@ -74,16 +74,20 @@ class HtmlEmail
         global $wpdb;
         if (SETTINGS['no-statistics']) {
             // Add e-mail to e-mails db
-            $wpdb->insert(
+            $this->emailId   = TSJIPPY\insertInDb(
                 $this->mailTable,
                 array(
                     'subject'        => $this->subject,
                     'recipients'    => $this->recipients,
                     'time_send'     => current_time('U')
-                )
+                ),
+                [
+                    '%s',
+                    '%s',
+                    '%d'
+                ],
+                'html-email'
             );
-
-            $this->emailId   = $wpdb->insert_id;
         }
     }
 
@@ -474,5 +478,14 @@ class HtmlEmail
 
         $wpdb->query("TRUNCATE $this->mailTable");
         $wpdb->query("TRUNCATE events");
+
+        /**
+         * Flush db cache
+         */
+        if(wp_cache_supports( 'flush_group' )){
+            wp_cache_flush_group('html-email');
+        }else{
+            wp_cache_flush();
+        }
     }
 }

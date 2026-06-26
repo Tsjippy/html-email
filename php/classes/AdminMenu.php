@@ -29,35 +29,25 @@ class AdminMenu extends ADMIN\SubAdminMenu
 
 ?>
         <label>
-            <input type='checkbox' name='no-statistics' value='1' <?php if (isset($this->settings['no-statistics'])) {
-                                                                        echo 'checked';
-                                                                    } ?>>
+            <input type='checkbox' name='no-statistics' value='1' <?php if (isset($this->settings['no-statistics'])) echo 'checked'; ?>>
             Do not keep statistics about e-mails
         </label>
         <br>
         <label>
-            <input type='checkbox' name='no-localhost' value='1' <?php if (isset($this->settings['no-localhost'])) {
-                                                                        echo 'checked';
-                                                                    } ?>>
+            <input type='checkbox' name='no-localhost' value='1' <?php if (isset($this->settings['no-localhost'])) echo 'checked'; ?>>
             Do not send e-mails from localhost
         </label>
         <br>
         <br>
         <label>
             Default e-mail greeting<br>
-            <input type='text' name='closing' value='<?php if (isset($this->settings['closing'])) {
-                                                            echo $this->settings['closing'];
-                                                        } else {
-                                                            echo 'Kind regards';
-                                                        } ?>'>
+            <input type='text' name='closing' value='<?php echo isset($this->settings['closing']) ? $this->settings['closing'] : 'Kind regards'; ?>'>
         </label>
         <br>
         <br>
         <label>
             Max attachment size in MB (multiple e-mails will be send to stay below the maximum if needed)<br>
-            <input type='number' name='maxsize' value='<?php if (isset($this->settings['maxsize'])) {
-                                                            echo $this->settings['maxsize'];
-                                                        } ?>'>
+            <input type='number' name='maxsize' value='<?php if (isset($this->settings['maxsize'])) echo esc_attr($this->settings['maxsize']); ?>'>
         </label>
         <br>
         <br>
@@ -131,27 +121,15 @@ class AdminMenu extends ADMIN\SubAdminMenu
                 <div class="alignleft">
                     <select name="timespan" class="nonice" onchange="showdatefields(this)">
                         <option value="7">Last 7 days</option>
-                        <option value="14" <?php if ($timeSpan == "14") {
-                                                echo 'selected';
-                                            } ?>>Last 14 days</option>
-                        <option value="30" <?php if ($timeSpan == "30") {
-                                                echo 'selected';
-                                            } ?>>Last 30 days</option>
-                        <option value="after" <?php if ($timeSpan == "after") {
-                                                    echo 'selected';
-                                                } ?>>After...</option>
-                        <option value="custom" <?php if ($timeSpan == "custom") {
-                                                    echo 'selected';
-                                                } ?>>Custom Date Range</option>
+                        <option value="14" <?php if ($timeSpan == "14") echo 'selected'; ?>>Last 14 days</option>
+                        <option value="30" <?php if ($timeSpan == "30") echo 'selected'; ?>>Last 30 days</option>
+                        <option value="after" <?php if ($timeSpan == "after") echo 'selected'; ?>>After...</option>
+                        <option value="custom" <?php if ($timeSpan == "custom") echo 'selected'; ?>>Custom Date Range</option>
                     </select>
 
-                    <input type="date" name="date" class="" value="<?php echo TSJIPPY\sanitize($_POST['date'] ?? ''); ?>" <?php if ($timeSpan != "after") {
-                                                                                                            echo 'style="display:none;"';
-                                                                                                        } ?>>
+                    <input type="date" name="date" class="" value="<?php echo TSJIPPY\sanitize($_POST['date'] ?? ''); ?>" <?php if ($timeSpan != "after") echo 'style="display:none;"'; ?>>
 
-                    <span id="querydates" <?php if ($timeSpan != "custom") {
-                                                echo 'style="display:none;"';
-                                            } ?>>
+                    <span id="querydates" <?php if ($timeSpan != "custom") echo 'style="display:none;"'; ?>>
                         Between <input type="date" name="date-start" class="" value="<?php echo TSJIPPY\sanitize($_POST['date-start'] ?? ''); ?>">
                         and <input type="date" name="date-end" class="" value="<?php echo TSJIPPY\sanitize($_POST['date-end'] ?? ''); ?>">
 
@@ -159,9 +137,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
 
                     <select name="type" class="nonice">
                         <option value="mail-opened">Openend</option>
-                        <option value="link-clicked" <?php if (($_POST['type'] ?? '') == "link-clicked") {
-                                                            echo 'selected';
-                                                        } ?>>Clicked links</option>
+                        <option value="link-clicked" <?php if (($_POST['type'] ?? '') == "link-clicked") echo 'selected'; ?>>Clicked links</option>
                     </select>
 
                     <?php
@@ -171,11 +147,11 @@ class AdminMenu extends ADMIN\SubAdminMenu
                             <option value='' $selected>---</option>
                             <?php
                             foreach ($recipients as $recipient) {
-                                $selected   = '';
-                                if (($_POST['recipient'] ?? '') == $recipient) {
-                                    $selected   = 'selected="selected"';
-                                }
-                                echo "<option value='$recipient' $selected>$recipient</option>";
+                                ?>
+                                <option value='<?php echo esc_attr($recipient);?>' <?php if (($_POST['recipient'] ?? '') == $recipient) echo 'selected="selected"';?>>
+                                    <?php echo esc_html($recipient);?>
+                                </option>
+                                <?php
                             }
                             ?>
                         </select>
@@ -221,19 +197,20 @@ class AdminMenu extends ADMIN\SubAdminMenu
                     ?>
                         <tr>
                             <td>
-                                <?php echo gmdate(TSJIPPY\DATEFORMAT . ' ' . TSJIPPY\TIMEFORMAT, $result->time_send); ?>
+                                <?php echo esc_html(gmdate(TSJIPPY\DATEFORMAT . ' ' . TSJIPPY\TIMEFORMAT, $result->time_send)); ?>
                             </td>
                             <td>
-                                <?php echo $result->recipients ?? ''; ?>
+                                <?php echo esc_attr($result->recipients ?? ''); ?>
                             </td>
                             <td>
                                 <?php echo esc_attr($result->subject ?? ''); ?>
                             </td>
                             <?php
+                            // phpcs:ignore
                             if (($_POST['type'] ?? '') == 'link-clicked') {
                             ?>
                                 <td>
-                                    <?php echo $result->url; ?>
+                                    <?php echo esc_attr($result->url); ?>
                                 </td>
                             <?php
                             } else {

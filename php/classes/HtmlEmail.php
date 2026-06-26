@@ -367,19 +367,21 @@ class HtmlEmail
                                     <h1 style="color:#241c15;font-family:Georgia,Times,'Times New Roman',serif;font-size:28px;font-style:normal;font-weight:400;line-height:36px;letter-spacing:normal;margin:0px 0px 20px 0px;padding:0;text-align:center">
                                         <?php echo esc_attr($this->subject); ?>
                                     </h1>
-                                    <?php echo $message; ?>
+                                    <?php echo esc_attr($message); ?>
                                 </td>
                             </tr>
                             <!-- Footer -->
                             <tr style="padding: 0; vertical-align: top; text-align: left;">
                                 <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
                                     <?php
-                                    echo apply_filters('tsjippy-email-footer', $this->footer, $this->message);
+                                    echo wp_kses_post(apply_filters('tsjippy-email-footer', $this->footer, $this->message));
 
                                     if (SETTINGS['no-statistics'] ?? false) {
                                         $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";
 
-                                        echo "<img src='$url' alt=' . ' width='1px' height='1px'>";
+                                        ?>
+                                        <img src='<?php esc_url($url);?>' alt=' . ' width='1px' height='1px'>
+                                        <?php
                                     }
                                     ?>
                                 </td>

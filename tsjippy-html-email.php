@@ -14,7 +14,7 @@ use TSJIPPY;
  * Requires PHP:         8.3
  * Tested up to:         7.0
  * Plugin URI:            https://github.com/Tsjippy/htmlemail/
- * Tested:                6.9
+ * Tested:               7.0
  * TextDomain:            tsjippy
  * Requires Plugins:    
  * License: GPLv2 or later
@@ -25,8 +25,6 @@ use TSJIPPY;
 if (! defined('ABSPATH')) {
     exit;
 }
-
-
 
 // Define constants
 define(__NAMESPACE__ . '\PLUGIN', plugin_basename(__FILE__));
@@ -50,3 +48,14 @@ add_action('activated_plugin', function ($plugin) {
 if(file_exists(__DIR__  . '/shared-functionality/loader.php')){
     require_once(__DIR__  . '/shared-functionality/loader.php');
 }
+
+// run right before activation
+register_activation_hook(__FILE__, function () {
+    if(file_exists(__DIR__  . '/shared-functionality/loader.php')){
+        require_once(__DIR__  . '/shared-functionality/loader.php');
+    }
+
+    if(function_exists('TSJIPPY\activate')){
+        \TSJIPPY\activate();
+    }
+});

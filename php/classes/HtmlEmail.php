@@ -380,7 +380,7 @@ class HtmlEmail
                                         $url    = "$this->mailTrackerUrl?mailid=$this->emailId&ver=$this->emailId";
 
                                         ?>
-                                        <img src='<?php esc_url($url);?>' alt=' . ' width='1px' height='1px'>
+                                        <img src='<?php echo esc_url($url);?>' alt=' . ' width='1px' height='1px'>
                                         <?php
                                     }
                                     ?>

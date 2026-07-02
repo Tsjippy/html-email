@@ -2,6 +2,17 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Updated
+
+## [10.3.7] - 2026-07-02
+
+
+### Added
 - attribute escaping
 - activate shared code function
 
@@ -10,8 +21,6 @@
 
 ### Fixed
 - missing echo call
-
-### Updated
 
 ## [10.3.6] - 2026-06-26
 

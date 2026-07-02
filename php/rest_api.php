@@ -9,6 +9,9 @@ if (! defined('ABSPATH')) {
 }
 
 add_action('rest_api_init',  __NAMESPACE__ . '\restApiInit');
+/**
+ * Initializes the REST API routes for the plugin.
+ */
 function restApiInit()
 {
     //Route for e-mail tracking of today

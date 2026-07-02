@@ -23,11 +23,17 @@ class AdminMenu extends ADMIN\SubAdminMenu
         parent::__construct($settings, $name);
     }
 
+    /**
+     * Display the settings page for the plugin.
+     *
+     * @param string $parent The parent menu slug
+     * @return bool True if the settings page was displayed successfully, false otherwise
+     */
     public function settings($parent)
     {
         ob_start();
 
-?>
+        ?>
         <label>
             <input type='checkbox' name='no-statistics' value='1' <?php if (isset($this->settings['no-statistics'])) echo 'checked'; ?>>
             Do not keep statistics about e-mails
@@ -61,11 +67,23 @@ class AdminMenu extends ADMIN\SubAdminMenu
         return true;
     }
 
+    /**
+     * Display the emails page for the plugin.
+     *
+     * @param string $parent The parent menu slug
+     * @return bool True if the emails page was displayed successfully, false otherwise
+     */
     public function emails($parent)
     {
         return false;
     }
 
+    /**
+     * Display the data page for the plugin.
+     *
+     * @param string $parent The parent menu slug
+     * @return bool True if the data page was displayed successfully, false otherwise
+     */
     public function data($parent)
     {
         TSJIPPY\addRawHtml($this->emailStats(), $parent);
@@ -73,11 +91,22 @@ class AdminMenu extends ADMIN\SubAdminMenu
         return true;
     }
 
+    /**
+     * Display the functions page for the plugin.
+     *
+     * @param string $parent The parent menu slug
+     * @return bool True if the functions page was displayed successfully, false otherwise
+     */
     public function functions($parent)
     {
         return false;
     }
 
+    /**
+     * Display the email statistics page for the plugin.
+     *
+     * @return string The HTML content of the email statistics page
+     */
     public function emailStats()
     {
         //Load js

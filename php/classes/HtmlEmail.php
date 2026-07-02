@@ -10,16 +10,20 @@ if (! defined('ABSPATH')) {
 
 class HtmlEmail
 {
-    public $mailTable;
-    public $mailEventTable;
-    public $mailTrackerUrl;
-    public $subject;
-    public $recipients;
-    public $headers;
-    public $message;
-    public $emailId;
-    public $footer;
+    public string $mailTable;
+    public string $mailEventTable;
+    public string $mailTrackerUrl;
+    public string $subject;
+    public string $recipients;
+    public array $headers;
+    public string $message;
+    public int $emailId;
+    public string $footer;
 
+    /**
+     * Constructor for the HtmlEmail class.
+     * Initializes the database table names and mail tracker URL.
+     */
     public function __construct()
     {
         global $wpdb;

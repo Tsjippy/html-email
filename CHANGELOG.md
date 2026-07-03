@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- plugin settings key
 
 ### Updated
 

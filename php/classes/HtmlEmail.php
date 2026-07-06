@@ -321,7 +321,7 @@ class HtmlEmail
         }
 
         ob_start();
-?>
+        ?>
         <!doctype html>
         <html lang="en">
 
@@ -369,9 +369,9 @@ class HtmlEmail
                             <tr style="padding: 0; vertical-align: top; text-align: left;">
                                 <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #ffffff; padding: 60px 75px 45px 75px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd;">
                                     <h1 style="color:#241c15;font-family:Georgia,Times,'Times New Roman',serif;font-size:28px;font-style:normal;font-weight:400;line-height:36px;letter-spacing:normal;margin:0px 0px 20px 0px;padding:0;text-align:center">
-                                        <?php echo esc_attr($this->subject); ?>
+                                        <?php echo wp_kses_post($this->subject); ?>
                                     </h1>
-                                    <?php echo esc_attr($message); ?>
+                                    <?php echo wp_kses_post($message); ?>
                                 </td>
                             </tr>
                             <!-- Footer -->
@@ -398,8 +398,8 @@ class HtmlEmail
 
         </html>
 
-<?php
-        $this->message = ob_get_clean();
+        <?php
+        $this->message = trim(ob_get_clean());
     }
 
     /**

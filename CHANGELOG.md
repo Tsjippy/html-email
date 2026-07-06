@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- html e-mail
 
 ### Updated
 

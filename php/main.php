@@ -78,16 +78,3 @@ function mailCatcher($errorMessage, $instance, $mailMailer)
     TSJIPPY\printArray($instance);
     TSJIPPY\printArray($mailMailer);
 }
-
-add_shortcode('tsjippy_email_stats', __NAMESPACE__ . '\emailStats');
-/**
- * Shortcode to display email statistics.
- *
- * @return string The HTML content of the email statistics page.
- */
-function emailStats()
-{
-    $adminMenu  = new AdminMenu(SETTINGS, 'e-mail');
-
-    return $adminMenu->emailStats();
-}

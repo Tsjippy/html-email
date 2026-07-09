@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- removed email_stats shortcode
 
 ### Fixed
 - html e-mail

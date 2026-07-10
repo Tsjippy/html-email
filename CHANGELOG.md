@@ -4,12 +4,19 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+### Updated
+
+## [10.4.1] - 2026-07-10
+
+
+### Changed
 - removed email_stats shortcode
 
 ### Fixed
 - html e-mail
-
-### Updated
 
 ## [10.4.0] - 2026-07-06
 

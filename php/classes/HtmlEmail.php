@@ -75,7 +75,6 @@ class HtmlEmail
      */
     private function storeEmail()
     {
-        global $wpdb;
         if (SETTINGS['no-statistics']) {
             // Add e-mail to e-mails db
             $this->emailId   = TSJIPPY\insertInDb(
@@ -148,17 +147,41 @@ class HtmlEmail
         $totalSize  = 0;
         $maxSize    = SETTINGS['maxsize'] ?? 20;
         $remaining  = [];
-        if (!$maxSize) {
-            $maxSize    = 20;
-        }
 
         // check if the total attachment size is past the limit
         if(is_array($args['attachments'])){
             foreach ($args['attachments'] as $index => $attach) {
+                // This attachment is bigger than the limit
+                if(filesize($attach) > $maxSize){
+                    /**
+                     * Move the attachment to a private folder
+                     */
+                    $fileName       = basename($attach);
+                    $destination    = wp_upload_dir()['basedir'] . '/private/' . $fileName;
+                    $url            = TSJIPPY\pathToUrl($destination);
+                    $wpFileSystem   = TSJIPPY\loadWpFileSystem();
+
+                    // Move the attachment
+                    $wpFileSystem->move($attach, $destination);
+
+                    // Get an unique hash
+                    $hash   = $this->createFileHash($url);
+
+                    // Create an html link
+                    $link   = "<br><br>Open <a href='$url?imagehash=$hash' target='_blank'>$fileName</a>";
+
+                    // Append the link to the e-mail
+                    $args['message']    .= $link;
+
+                    TSJIPPY\printArray("File '$attach' is larger than the limit of $maxSize MB for e-mail attachment, transformed it to a clickable link");
+                }
                 $totalSize   += filesize($attach);
 
                 // if this is more than the limit
-                if (number_format($totalSize / 1048576, 2) >= $maxSize) {
+                if (
+                    number_format($totalSize / 1048576, 2) >= $maxSize &&   // Total so far is more than then the max
+                    count($args['attachments']) > 1                         // We have more than one attachment
+                ) {
                     $remaining[]    = $attach;
                     unset($args['attachments'][$index]);
                 }
@@ -182,7 +205,14 @@ class HtmlEmail
                 $subject    = "$this->subject - 1";
             }
 
+            // Remove this filter first to prevent a loop
+            remove_filter('wp_mail', __NAMESPACE__ . '\mailFilter', 10,);
+
+            // Send the mail
             wp_mail($this->recipients, $subject, $this->message, $args['headers'], $remaining);
+
+            // Add the filter again
+            add_filter('wp_mail', __NAMESPACE__ . '\mailFilter', 10, 1);
         }
 
         $this->storeEmail();
@@ -225,6 +255,22 @@ class HtmlEmail
     }
 
     /**
+     * Creates a hash to securely share a protected url
+     * 
+     * @param   string  $url    The url to protect
+     */
+    public function createFileHash($url){
+        // create the random string
+        $str    = wp_rand();
+        $hash   = md5($str);
+
+        // store hash in db for a month
+        set_transient("tsjippy_$hash", basename($url), MONTH_IN_SECONDS);
+
+        return $hash;
+    }
+
+    /**
      * Replace any images to tracebale ones
      *
      * @param   array   $matches    Matches from a regex
@@ -242,19 +288,13 @@ class HtmlEmail
             $matches    = [$matches, $matches];
         }
 
-        $html        = $matches[0];
-        $url        = $matches[1];
+        $html = $matches[0];
+        $url  = $matches[1];
 
         // add a hash so image is also readible when not logged in
         if (str_contains($url, '/private/')) {
-            // create the random string
-            $str    = wp_rand();
-            $hash   = md5($str);
-
-            // store hash in db for a month
-            set_transient("tsjippy_$hash", basename($url), MONTH_IN_SECONDS);
-
-            $html        = str_replace($url, "$url?imagehash=$hash", $html);
+            $hash   = $this->createFileHash($url);
+            $html   = str_replace($url, "$url?imagehash=$hash", $html);
         }
 
         return $html;

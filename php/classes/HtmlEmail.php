@@ -369,8 +369,152 @@ class HtmlEmail
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width">
-            <title><?php echo esc_attr($this->subject); ?></title>
+            <title>
+                <?php echo esc_attr($this->subject); ?>
+            </title>
             <style type="text/css">
+                body{
+                    height: 100% !important;
+                    width: 100% !important;
+                    min-width: 100%;
+                    -moz-box-sizing: border-box;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    -webkit-font-smoothing: antialiased !important;
+                    -moz-osx-font-smoothing: grayscale !important;
+                    -ms-text-size-adjust: 100%;
+                    -webkit-text-size-adjust: 100%;
+                    color: #444;
+                    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                    font-weight: normal;
+                    padding: 0;
+                    margin: 0;
+                    Margin: 0;
+                    font-size: 14px;
+                    mso-line-height-rule: exactly;
+                    line-height: 140%;
+                    background-color: #f1f1f1;
+                    text-align: center;
+                }
+
+                table{
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    vertical-align: top;
+                    padding: 0;
+                    mso-table-lspace: 0pt;
+                    mso-table-rspace: 0pt;
+                    -ms-text-size-adjust: 100%;
+                    -webkit-text-size-adjust: 100%;
+
+                }
+
+                table.body{
+                    height: 100% !important;
+                    width: 100% !important;
+                    min-width: 100%;
+                    -moz-box-sizing: border-box;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    -webkit-font-smoothing: antialiased !important;
+                    -moz-osx-font-smoothing: grayscale !important;
+                    background-color: #f1f1f1;
+                    color: #444;
+                    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                    font-weight: normal;
+                    margin: 0;
+                    Margin: 0;
+                    text-align: left;
+                    font-size: 14px;
+                    mso-line-height-rule: exactly;
+                    line-height: 140%
+                }
+
+                table.container{
+                    width: 600px;
+                    margin: 0 auto 30px auto;
+                    Margin: 0 auto 30px auto;
+                    text-align: inherit;
+                }
+
+                tr{
+                    padding: 0;
+                    vertical-align: top;
+                    text-align: left
+                }
+
+                td{
+                    word-wrap: break-word;
+                    -webkit-hyphens: auto;
+                    -moz-hyphens: auto;
+                    hyphens: auto;
+                    border-collapse: collapse !important;
+                    vertical-align: top;
+                    mso-table-lspace: 0pt;
+                    mso-table-rspace: 0pt;
+                    -ms-text-size-adjust: 100%;
+                    -webkit-text-size-adjust: 100%;
+                    color: #444;
+                    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                    font-weight: normal;
+                    margin: 0;
+                    Margin: 0;
+                    mso-line-height-rule: exactly;
+                    font-size: 14px;
+                    line-height: 140%;
+                }
+
+                td.body-inner{
+                    padding: 0;
+                    text-align: center;
+                }
+
+                td.header{
+                    text-align: center;
+                    padding: 30px 30px 22px 30px;
+                }
+
+                td.content{
+                    text-align: left;
+                }
+
+                tr.content td.content{
+                    background-color: #ffffff;
+                    padding: 60px 75px 45px 75px;
+                    border-right: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    border-left: 1px solid #ddd;
+                }
+
+                .footer td.content{
+                    line-height: 140%;
+                    padding: 20px 0px;
+                    text-align: center;
+                }
+
+                img.logo{
+                    outline: none;
+                    text-decoration: none;
+                    max-width: 100%;
+                    clear: both;
+                    -ms-interpolation-mode: bicubic;
+                    display: inline-block !important;
+                    width: 250px;
+                }
+
+                h1{
+                    color:#241c15;
+                    font-family:Georgia,Times,'Times New Roman',serif;
+                    font-size:28px;
+                    font-style:normal;
+                    font-weight:400;
+                    line-height:36px;
+                    letter-spacing:normal;
+                    margin:0px 0px 20px 0px;
+                    padding:0;
+                    text-align:center
+                }
+
                 @media only screen and (max-width: 599px) {
                     table.body .container {
                         width: 95% !important;
@@ -390,33 +534,49 @@ class HtmlEmail
                         padding: 30px 40px 20px 40px !important;
                     }
                 }
+
+                <?php
+                // Find any styling and move them here
+                preg_match_all("/<style>(.*?)<\/style>/s", $message, $matches);
+                if(!empty($matches[1])){
+                    foreach($matches[1] as $match){
+                        echo trim(wp_kses_post(wp_kses_post($match)));
+                    }
+
+                    foreach($matches[0] as $match){
+                        $message    = str_replace($match, '', $message);
+                    }
+                }
+                ?>
             </style>
         </head>
 
-        <body style="height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #f1f1f1; text-align: center;">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" class="body" style="border-collapse: collapse; border-spacing: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; height: 100% !important; width: 100% !important; min-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; background-color: #f1f1f1; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%;">
-                <tr style="padding: 0; vertical-align: top; text-align: left;">
-                    <td align="center" valign="top" class="body-inner" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center;">
+        <body>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" class="body" >
+                <tr>
+                    <td align="center" valign="top" class="body-inner">
                         <!-- Container -->
-                        <table border="0" cellpadding="0" cellspacing="0" class="container" style="border-collapse: collapse; border-spacing: 0; padding: 0; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 600px; margin: 0 auto 30px auto; Margin: 0 auto 30px auto; text-align: inherit;">
+                        <table border="0" cellpadding="0" cellspacing="0" class="container" >
                             <!-- Header -->
-                            <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                <td align="center" valign="middle" class="header" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center; padding: 30px 30px 22px 30px;">
-                                    <a href="<?php echo TSJIPPY\SITEURL; ?>"><img src="<?php echo esc_attr($logoUrl); ?>" alt="Site Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 250px;"></a>
+                            <tr >
+                                <td align="center" valign="middle" class="header">
+                                    <a href="<?php echo TSJIPPY\SITEURL;?>">
+                                        <img src="<?php echo esc_attr($logoUrl); ?>" alt="Site Logo" class='logo'>
+                                    </a>
                                 </td>
                             </tr>
                             <!-- Content -->
-                            <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; background-color: #ffffff; padding: 60px 75px 45px 75px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd;">
-                                    <h1 style="color:#241c15;font-family:Georgia,Times,'Times New Roman',serif;font-size:28px;font-style:normal;font-weight:400;line-height:36px;letter-spacing:normal;margin:0px 0px 20px 0px;padding:0;text-align:center">
+                            <tr class='content'>
+                                <td align="left" valign="top" class="content">
+                                    <h1>
                                         <?php echo wp_kses_post($this->subject); ?>
                                     </h1>
                                     <?php echo wp_kses_post($message); ?>
                                 </td>
                             </tr>
                             <!-- Footer -->
-                            <tr style="padding: 0; vertical-align: top; text-align: left;">
-                                <td align="left" valign="top" class="content" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; padding: 20px 0px; text-align: center;">
+                            <tr class='footer'>
+                                <td align="left" valign="top" class="content">
                                     <?php
                                     echo wp_kses_post(apply_filters('tsjippy-email-footer', $this->footer, $this->message));
 

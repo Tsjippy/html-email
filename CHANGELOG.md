@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- styling
 
 ### Fixed
 - bug when mail attachment is bigger than allowed

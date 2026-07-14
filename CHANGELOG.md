@@ -4,12 +4,19 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+### Updated
+
+## [10.5.1] - 2026-07-14
+
+
+### Changed
 - styling
 
 ### Fixed
 - bug when mail attachment is bigger than allowed
-
-### Updated
 
 ## [10.5.0] - 2026-07-14
 

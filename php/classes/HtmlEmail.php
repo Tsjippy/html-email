@@ -689,7 +689,7 @@ class HtmlEmail
          * Flush db cache
          */
         if(wp_cache_supports( 'flush_group' )){
-            wp_cache_flush_group('html-email');
+            wp_cache_flush_group('tsjippy_html-email');
         }else{
             wp_cache_flush();
         }

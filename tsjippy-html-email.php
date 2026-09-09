@@ -7,14 +7,14 @@ use TSJIPPY;
 /**
  * Plugin Name:          Tsjippy HTML E-mail
  * Description:          This plugin will place all e-mails sent in a nice format.<br>It will also add a warning to the bottom of the e-mail about it being an automated e-mail.<br>If there is no complementary close in the e-mail it will add oneIt will also monitor how often an e-mail is opened.<br>
- * Version:              10.6.1
+ * Version:              10.6.2
  * Author:               Ewald Harmsen
  * AuthorURI:            harmseninnigeria.nl
  * Requires at least:    6.3
  * Requires PHP:         8.3
- * Tested up to:         7.0
+ * Tested up to:         7.1
  * Plugin URI:            https://github.com/Tsjippy/htmlemail/
- * Tested:               7.0
+ * Tested:               7.1
  * TextDomain:            tsjippy
  * Requires Plugins:    
  * License: GPLv2 or later

@@ -111,8 +111,8 @@ class AdminMenu extends ADMIN\SubAdminMenu
     public function emailStats()
     {
         //Load js
-        wp_enqueue_script('tsjippy_table_script');
-        wp_enqueue_script('tsjippy_html_email_admin_script', TSJIPPY\pathToUrl(PLUGINPATH . 'js/admin.min.js'), array(), PLUGINVERSION, true);
+        wp_enqueue_script_module('@tsjippy/table_script');
+        wp_enqueue_script_module('@tsjippy/html_email_admin_script', TSJIPPY\pathToUrl(PLUGINPATH . 'js/admin.min.js'), array(), PLUGINVERSION);
 
         $email     = new HtmlEmail();
 

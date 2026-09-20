@@ -112,7 +112,7 @@ class AdminMenu extends ADMIN\SubAdminMenu
     {
         //Load js
         wp_enqueue_script_module('@tsjippy/table_script');
-        wp_enqueue_script_module('@tsjippy/html_email_admin_script', TSJIPPY\pathToUrl(PLUGINPATH . 'js/admin.min.js'), array(), PLUGINVERSION);
+        wp_enqueue_script_module('@tsjippy/html_email_admin_script', TSJIPPY\pathToUrl(PLUGINPATH . 'js/admin' . TSJIPPY\JSEXTENSION), array(), PLUGINVERSION);
 
         $email     = new HtmlEmail();
 

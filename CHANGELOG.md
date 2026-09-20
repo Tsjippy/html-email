@@ -5,6 +5,7 @@
 
 ### Changed
 - js to modules
+- load minification js depending on SCRIPT_DEBUG constant
 
 ### Fixed
 

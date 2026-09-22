@@ -4,8 +4,9 @@
   "description": "captcha",
   "main": "./captcha.js",
   "scripts": {
-    "admin": "webpack --entry ./admin.js --output-path . --output-filename admin.min.js --progress --mode=production --devtool source-map",
-    "all": "run-p admin  "
+    "build": "webpack --progress",
+    "watch": "webpack --watch --progress",
+    "all": "npm run build"
   },
   "author": "Ewald Harmsen",
   "license": "ISC",
